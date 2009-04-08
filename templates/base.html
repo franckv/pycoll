@@ -1,3 +1,4 @@
+{% load app_extras %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
 <head>
@@ -23,22 +24,19 @@
 		<div id="sidebar">
 			<div id="mainmenu" class="menu">
 				<ul>
-					<li id="home"><a href="/blog/">Home</a></li>
+					<li id="home"><a href="/manager/">Home</a></li>
+					<li id="admin"><a href="/admin/">Admin</a></li>
 					<li id="links"><a href="/links/">Links</a></li>
 					<li id="about"><a href="/about/">About</a></li>
 				</ul>
 			</div>
 			<div id="actions" class="menu">
 				<h3 class="menutitle">Actions</h3>
-				couin
+				{% include 'app/all_actions.html' %}
 			</div>
 			<div id="categories" class="menu">
 				<h3 class="menutitle">Categories</h3>
-				couin
-			</div>
-			<div id="archives">
-				<h3 class="menutitle">Archives</h3>
-				couin
+				{% show_all_categories %}
 			</div>
 			<div id="feeds"> 
 				<h3 class="menutitle">Feeds</h3>
