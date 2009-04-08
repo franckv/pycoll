@@ -13,7 +13,7 @@ font-weight:normal;
 line-height:normal;
 }
 
-a img {border: thin solid black ;}
+a img {border: 0 ;}
 
 img {border: thin solid black ;}
 
@@ -21,6 +21,42 @@ textarea,input {border: thin solid #DDDDDD ;}
 
 a.title{
 text-decoration: none;
+}
+
+table
+{
+	/*border-collapse: collapse; */
+	clear: both;
+	width: 100%;
+}
+
+/* These two are for the listings, where the colors alternate. */
+td
+{
+	background-color: #c8c8c8;
+	font-size: x-small;
+	padding-left: 0px;
+	padding-right: 0px;
+	text-align: center;
+	border-spacing: 0;
+}
+
+table a
+{
+	background-position: center;
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+.toolbox a
+{
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.toolbox
+{
+	width: 40px;
 }
 
 #page {
@@ -98,28 +134,11 @@ margin-bottom:10px;
 }
 
 #categories h3 {
-background: transparent url(../img/folder.png) no-repeat scroll 8px 4px;
+background: transparent url(../img/page_white_stack.png) no-repeat scroll 8px 4px;
 }
 
 #categories {
 margin-bottom:10px;
-}
-
-#archives {
-margin-bottom:10px;
-padding: 5px;
-/*border: 1px dashed #DDDDDD;
-background-color: #EEEEEE;*/
-}
-
-#archives ul {
-list-style-image: url(../img/calendar_view_month.png);
-list-style-position: inside;
-list-style-type:none;
-}
-
-#archives h3 {
-background: transparent url(../img/page_white_stack.png) no-repeat scroll 8px 4px;
 }
 
 #feeds {
