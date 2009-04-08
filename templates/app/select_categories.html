@@ -1,0 +1,9 @@
+<select name='{{name}}'>
+    {% for category in all_categories %}
+	{% ifequal category.name default.name %}
+	    <option value='{{category}}' selected='selected'>{{category}}</option>
+	{% else %}
+	    <option value='{{category}}'>{{category}}</option>
+	{% endifequal %}
+    {% endfor %}
+</select>

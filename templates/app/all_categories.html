@@ -1,0 +1,6 @@
+<ul>
+    <li><a href='/manager/'>All</a></li>
+    {% for category in all_categories %}
+    <li><a href='{{category.get_absolute_url}}'>{{ category }}</a></li>
+    {% endfor %}
+</ul>

@@ -29,6 +29,9 @@ class ItemType(models.Model):
     name = models.CharField(max_length=50, choices=(('CD', 'CD'), ('DVD', 'DVD')))
     description = models.CharField(max_length=255)
 
+    def get_absolute_url(self):
+	return '/manager/categories/%s/' % (self.pk)
+
     def __unicode__(self):
 	return self.name
 
@@ -37,6 +40,9 @@ class Item(models.Model):
     type = models.ForeignKey(ItemType)
     description =  models.CharField(max_length=255)
     roles = models.ManyToManyField(Performer, through='Role', blank=True)
+
+    def get_absolute_url(self):
+	return '/manager/items/%s/' % (self.pk)
 
     def __unicode__(self):
 	return self.name
