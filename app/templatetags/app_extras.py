@@ -22,8 +22,8 @@ def get_cover(item):
     url = '/covers/' + filename
     default = '/covers/item_default.png'
     if os.path.exists(path):
-	return {'url': url}
+	return {'coverurl': url}
     else:
-	return {'url': default}
+	return {'coverurl': default}
 
 
