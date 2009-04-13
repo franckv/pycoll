@@ -29,8 +29,9 @@ class ItemType(models.Model):
     name = models.CharField(max_length=50, choices=(('CD', 'CD'), ('DVD', 'DVD')))
     description = models.CharField(max_length=255)
 
+    @models.permalink
     def get_absolute_url(self):
-	return '/manager/categories/%s/' % (self.pk)
+	return ('app.views.category', [str(self.pk)])
 
     def __unicode__(self):
 	return self.name
@@ -38,14 +39,21 @@ class ItemType(models.Model):
 class Item(models.Model):
     name =  models.CharField(max_length=255)
     type = models.ForeignKey(ItemType)
-    description =  models.CharField(max_length=255)
+    description =  models.CharField(max_length=255, blank=True)
+    release_date = models.DateField(blank=True, null=True)
+    creation_date = models.DateTimeField()
+    update_date = models.DateTimeField()
     roles = models.ManyToManyField(Performer, through='Role', blank=True)
 
+    @models.permalink
     def get_absolute_url(self):
-	return '/manager/items/%s/' % (self.pk)
+	return ('app.views.item', [str(self.pk)])
 
     def __unicode__(self):
 	return self.name
+
+    class Meta:
+	ordering = ['name']
 
 class RoleType(models.Model):
     name = models.CharField(max_length=50)
