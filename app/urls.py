@@ -1,7 +1,7 @@
 from django.conf.urls.defaults import *
 
-urlpatterns = patterns('CollMan.app.views',
-    (r'^$', 'items'),
+urlpatterns = patterns('app.views',
+    (r'^$', 'home'),
     (r'^items/$', 'items'),
     (r'^items/(?P<item_id>\d+)/$', 'item'),
     (r'^items/(?P<item_id>\d+)/edit/$', 'item_edit'),
@@ -10,5 +10,7 @@ urlpatterns = patterns('CollMan.app.views',
     (r'^items/(?P<item_id>\d+)/delete/force/$', 'item_delete_force'),
     (r'^items/add/$', 'item_add'),
     (r'^items/save/$', 'item_save'),
+    (r'^items/search/$', 'items_search'),
+    (r'^categories/$', 'all_categories'),
     (r'^categories/(?P<type_id>\d+)/$', 'category'),
 )

@@ -1,10 +1,37 @@
+import datetime
+
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect
-from CollMan.app.models import Item, ItemType
+from django.core.paginator import Paginator, InvalidPage, EmptyPage
+from django.core.urlresolvers import reverse
+
+from app.models import Item, ItemType, CD, DVD
+
+
+def home(request):
+    return items(request)
 
 def items(request):
-    first_item_list = Item.objects.all()[:5]
+    item_list = Item.objects.all()
+    paginator = Paginator(item_list, 5)
+
+    try:
+	page = int(request.GET.get('page', '1'))
+    except ValueError:
+	page = 1
+
+    try:
+	first_item_list = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+	first_item_list = paginator.page(paginator.num_pages)
+
     return render_to_response('app/items.html', {'items': first_item_list})
+
+def all_categories(request):
+    return items(request)
+
+def items_search(request):
+    pass
 
 def item(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
@@ -21,7 +48,7 @@ def item_delete(request, item_id):
 def item_delete_force(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
     item.delete()
-    return HttpResponseRedirect('/manager/items/')
+    return HttpResponseRedirect(reverse('app.views.items'))
 
 def item_post(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
@@ -32,6 +59,7 @@ def item_post(request, item_id):
 	item.name = request.POST['name']
 	item.type = type
 	item.description = request.POST['description']
+	item.update_date = datetime.datetime.now()
     except (KeyError):
 	return render_to_response('app/item_edit.html', {'item': item})
     else:
@@ -44,13 +72,22 @@ def item_add(request):
 
 def item_save(request):
     try:
-	item = Item()
+	itemtype = get_object_or_404(ItemType, name=request.POST['type'])
+	if itemtype.name == 'CD':
+	    item = CD()
+	    item.type = itemtype
+	elif itemtype.name == 'DVD':
+	    item = DVD()
+	    item.type = itemtype
+	else:
+	    item = Item()
+
 	if len(request.POST['name']) == 0:
 	    return render_to_response('app/item_add.html')
 	item.name = request.POST['name']
-	type = get_object_or_404(ItemType, name=request.POST['type'])
-	item.type = type
 	item.description=request.POST['description']
+	item.creation_date = datetime.datetime.now()
+	item.update_date = datetime.datetime.now()
     except (KeyError):
 	return render_to_response('app/item_add.html')
     else:
@@ -58,5 +95,17 @@ def item_save(request):
 	return HttpResponseRedirect(item.get_absolute_url())
 
 def category(request, type_id):
-    first_item_list = Item.objects.filter(type=type_id)[:5]
+    item_list = Item.objects.filter(type=type_id)
+    paginator = Paginator(item_list, 5)
+
+    try:
+	page = int(request.GET.get('page', '1'))
+    except ValueError:
+	page = 1
+
+    try:
+	first_item_list = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+	first_item_list = paginator.page(paginator.num_pages)
+
     return render_to_response('app/items.html', {'items': first_item_list})
