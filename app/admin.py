@@ -1,4 +1,4 @@
-from CollMan.app.models import *
+from app.models import *
 from django.contrib import admin
 
 admin.site.register(Person)
