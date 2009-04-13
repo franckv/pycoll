@@ -23,7 +23,7 @@ a.title{
 text-decoration: none;
 }
 
-table
+.items table
 {
 	/*border-collapse: collapse; */
 	clear: both;
@@ -31,14 +31,42 @@ table
 }
 
 /* These two are for the listings, where the colors alternate. */
-td
+.items tr.even
 {
 	background-color: #c8c8c8;
-	font-size: x-small;
+}
+
+.items tr.odd
+{
+	background-color: #e8e8e8;
+}
+
+.items td
+{
 	padding-left: 0px;
 	padding-right: 0px;
 	text-align: center;
+	font-size: x-small;
 	border-spacing: 0;
+}
+
+td.item_cover
+{
+    height: 100px;
+    width: 100px;
+
+}
+
+td.item_type
+{
+    width: 10%;
+
+}
+
+td.item_tools
+{
+    width: 10%;
+
 }
 
 table a
@@ -48,15 +76,10 @@ table a
 	padding-right: 15px;
 }
 
-.toolbox a
+.items a
 {
 	padding-left: 0;
 	padding-right: 0;
-}
-
-.toolbox
-{
-	width: 40px;
 }
 
 #page {
