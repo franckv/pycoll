@@ -41,8 +41,8 @@ class Item(models.Model):
     type = models.ForeignKey(ItemType)
     description =  models.CharField(max_length=255, blank=True)
     release_date = models.DateField(blank=True, null=True)
-    creation_date = models.DateTimeField()
-    update_date = models.DateTimeField()
+    creation_date = models.DateTimeField(editable=False)
+    update_date = models.DateTimeField(editable=False)
     roles = models.ManyToManyField(Performer, through='Role', blank=True)
 
     @models.permalink
@@ -51,6 +51,19 @@ class Item(models.Model):
 
     def __unicode__(self):
 	return self.name
+
+    def new(cls, itemtype):
+	if itemtype.name == 'CD':
+	    item = CD()
+	elif itemtype.name == 'DVD':
+	    item = DVD()
+	else:
+	    item = Item()
+
+	item.type = itemtype
+	return item
+
+    new = classmethod(new)
 
     class Meta:
 	ordering = ['name']

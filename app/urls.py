@@ -9,6 +9,7 @@ urlpatterns = patterns('app.views',
     (r'^items/(?P<item_id>\d+)/delete/force/$', 'item_delete_force'),
     (r'^items/add/$', 'item_add'),
     (r'^items/search/$', 'items_search'),
+    (r'^items/import/$', 'items_import'),
     (r'^categories/$', 'all_categories'),
     (r'^categories/(?P<type_id>\d+)/$', 'category'),
 )

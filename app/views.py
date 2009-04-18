@@ -6,6 +6,7 @@ from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.core.urlresolvers import reverse
 
 from app.models import Item, ItemType, CD, DVD
+from app.forms import ItemForm, CDForm, DVDForm
 
 
 def home(request):
@@ -37,26 +38,6 @@ def item(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
     return render_to_response('app/item_view.html', {'item': item})
 
-def item_edit(request, item_id):
-    item = get_object_or_404(Item, pk=item_id)
-
-    if request.method == 'POST':
-	try:
-	    if len(request.POST['name']) == 0:
-		return render_to_response('app/item_edit.html', {'item': item})
-	    type = get_object_or_404(ItemType, name=request.POST['type'])
-	    item.name = request.POST['name']
-	    item.type = type
-	    item.description = request.POST['description']
-	    item.update_date = datetime.datetime.now()
-	except (KeyError):
-	    return render_to_response('app/item_edit.html', {'item': item})
-	else:
-	    item.save()
-	return HttpResponseRedirect(item.get_absolute_url())
-    else:
-	return render_to_response('app/item_edit.html', {'item': item})
-
 def item_delete(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
     return render_to_response('app/item_delete.html', {'item': item})
@@ -66,33 +47,61 @@ def item_delete_force(request, item_id):
     item.delete()
     return HttpResponseRedirect(reverse('app.views.items'))
 
-def item_add(request):
-    if request.method == 'POST':
-	try:
-	    itemtype = get_object_or_404(ItemType, name=request.POST['type'])
-	    if itemtype.name == 'CD':
-		item = CD()
-		item.type = itemtype
-	    elif itemtype.name == 'DVD':
-		item = DVD()
-		item.type = itemtype
-	    else:
-		item = Item()
+def item_edit(request, item_id):
+    item = get_object_or_404(Item, pk=item_id)
+    itemtype = item.type
+    if itemtype.name == 'CD':
+	formType = CDForm
+    elif itemtype.name == 'DVD':
+	formType = DVDForm
+    else:
+	formType = ItemForm
 
-	    if len(request.POST['name']) == 0:
-		return render_to_response('app/item_add.html')
-	    item.name = request.POST['name']
-	    item.description=request.POST['description']
-	    item.creation_date = datetime.datetime.now()
+    if request.method == 'POST':
+	form = formType(request.POST)
+	if form.is_valid():
+	    item.name = form.cleaned_data['name']
+	    item.type = form.cleaned_data['type']
+	    item.description = form.cleaned_data['description']
+	    item.release_date = form.cleaned_data['release_date']
 	    item.update_date = datetime.datetime.now()
-	except (KeyError):
-	    return render_to_response('app/item_add.html')
-	else:
 	    item.save()
 	    return HttpResponseRedirect(item.get_absolute_url())
     else:
-	type = get_object_or_404(ItemType, name='DVD')
-	return render_to_response('app/item_add.html', {'type': type})
+	form = formType(instance = item)
+
+    return render_to_response('app/item_form.html', {'item': item, 'form': form})
+
+def item_add(request):
+    itemtype = get_object_or_404(ItemType, name='DVD')
+    formType = ItemForm.get_form(itemtype)
+
+    if request.method == 'POST':
+	form = formType(request.POST)
+	if form.is_valid():
+	    item = Item.new(itemtype)
+	    item.name = form.cleaned_data['name']
+	    item.description = form.cleaned_data['description']
+	    item.release_date = form.cleaned_data['release_date']
+	    item.creation_date = datetime.datetime.now()
+	    item.update_date = datetime.datetime.now()
+	    item.save()
+	    return HttpResponseRedirect(item.get_absolute_url())
+    else:
+	form = formType()
+
+    return render_to_response('app/item_form.html', {'item': None, 'form': form})
+
+def items_import(request):
+    if request.method == 'POST':
+	try:
+	    pass
+	except (KeyError):
+	    return render_to_response('app/items_import.html')
+	else:
+	    return items(request)
+    else:
+	return render_to_response('app/items_import.html')
 
 def category(request, type_id):
     item_list = Item.objects.filter(type=type_id)
