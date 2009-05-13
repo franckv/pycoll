@@ -182,6 +182,23 @@ def role_add(request):
 
     return render_to_response('app/role_form.html', {'role': None, 'form': form})
 
+def role_item_add(request, item_id):
+    item = get_object_or_404(Item, pk=item_id)
+
+    if request.method == 'POST':
+	form = RoleForm(request.POST)
+	if form.is_valid():
+	    role = Role()
+	    role.item = form.cleaned_data['item']
+	    role.type = form.cleaned_data['type']
+	    role.performer = form.cleaned_data['performer']
+	    role.save()
+	    return HttpResponseRedirect(role.get_absolute_url())
+    else:
+	form = RoleForm(initial={'item': item.pk})
+
+    return render_to_response('app/role_form.html', {'role': None, 'form': form})
+
 def category(request, type_id):
     item_list = Item.objects.filter(type=type_id)
     paginator = Paginator(item_list, 5)

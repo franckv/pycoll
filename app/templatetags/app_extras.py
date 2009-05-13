@@ -29,4 +29,4 @@ def get_cover(item):
 @register.inclusion_tag('app/item_roles.html')
 def get_roles(item):
     roles = Role.objects.filter(item__pk=item.pk)
-    return {'roles': roles}
+    return {'roles': roles, 'item': item}

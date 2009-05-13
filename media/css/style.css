@@ -54,19 +54,16 @@ td.item_cover
 {
     height: 100px;
     width: 100px;
-
 }
 
 td.item_type
 {
     width: 10%;
-
 }
 
 td.item_tools
 {
     width: 10%;
-
 }
 
 table a
@@ -86,6 +83,11 @@ table a
 {
 	padding-left: 0;
 	padding-right: 0;
+}
+
+a.add_role
+{
+    text-decoration: none;
 }
 
 #page {

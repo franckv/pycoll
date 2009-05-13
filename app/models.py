@@ -116,6 +116,9 @@ class Role(models.Model):
     def __unicode__(self):
 	return '%s is %s of %s' % (self.performer.__unicode__(), self.type.__unicode__(), self.item.__unicode__())
 
+    def get_short_description(self):
+	return '%s is %s' % (self.performer.__unicode__(), self.type.__unicode__())
+
 class CD(Item):
     def __unicode__(self):
 	return self.name

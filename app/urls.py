@@ -17,5 +17,6 @@ urlpatterns = patterns('app.views',
     (r'^performers/add/$', 'performer_add'),
     (r'^roles/(?P<role_id>\d+)/$', 'role'),
     (r'^roles/(?P<role_id>\d+)/edit/$', 'role_edit'),
+    (r'^roles/add/(?P<item_id>\d+)/$', 'role_item_add'),
     (r'^roles/add/$', 'role_add'),
 )

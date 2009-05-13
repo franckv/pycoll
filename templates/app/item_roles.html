@@ -1,11 +1,10 @@
 <ul class='roles'>
     {% for role in roles %}
     <li>
-    <a href='{{role.get_absolute_url}}'>{{role}}</a>
+    <a href='{{role.get_absolute_url}}'>{{role.get_short_description}}</a>
     <a href='{{ role.get_absolute_url }}edit/'><img src='/media/img/edit.png' /></a>
     <a href='{{ role.get_absolute_url }}delete/'><img src='/media/img/delete.png' /></a>
     </li>
     {% endfor %}
-    <li><a href='{% url app.views.role_add %}'>+</li>
-	
+    <a class='add_role' href='{% url app.views.role_item_add item.pk %}'><img src='/media/img/add.png' /><i>add</i></a>
 </ul>
