@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load app_extras %}
+
+{% block title %}Collection Manager{% endblock %}
+
+{% block content %}
+
+<h1>{{ role }}</h1>
+
+<div id='details'>
+    <table>
+	<tr>
+	    <td>Id</td>
+	    <td>{{ role.pk }}</td>
+	</tr>
+	<tr>
+	    <td>Item</td>
+	    <td><a href='{{role.item.get_absolute_url}}'>{{role.item}}</a></td>
+	</tr>
+	<tr>
+	    <td>Performer</td>
+	    <td><a href='{{role.performer.get_absolute_url}}'>{{ role.performer }}</a></td>
+	</tr>
+	<tr>
+	    <td>Type</td>
+	    <td>{{role.type}}</td>
+	</tr>
+    </table>
+</div>
+<br />
+<div id='actions'>
+    <a href='{{role.get_absolute_url}}edit/'>Edit</a> - <a href='{{role.get_absolute_url}}delete/'>Delete</a>
+</div>
+{% endblock %}
+

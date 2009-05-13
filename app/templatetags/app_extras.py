@@ -1,5 +1,5 @@
 from django import template
-from CollMan.app.models import ItemType
+from CollMan.app.models import ItemType, Role
 from CollMan.settings import CACHE_ROOT
 import os
 
@@ -26,4 +26,7 @@ def get_cover(item):
     else:
 	return {'coverurl': default}
 
-
+@register.inclusion_tag('app/item_roles.html')
+def get_roles(item):
+    roles = Role.objects.filter(item__pk=item.pk)
+    return {'roles': roles}

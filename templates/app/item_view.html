@@ -29,6 +29,12 @@
 	    <td>Description</td>
 	    <td>{{ item.description }}</td>
 	</tr>
+	<tr>
+	    <td>Roles</td>
+	    <td>
+		{% get_roles item %}
+	    </td>
+	</tr>
     </table>
 </div>
 <br />

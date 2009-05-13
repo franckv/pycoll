@@ -26,7 +26,7 @@
 	<td class='item_cover'>{% get_cover item %}</td>
 	<td><a href='{{ item.get_absolute_url }}'>{{ item.name }}</a></td>
 	<td class='item_type'><a href='{{ item.type.get_absolute_url }}'>{{ item.type }}</a></td>
-	<td class='item_tools'><a href='{{ item.get_absolute_url }}edit/'><img src='/media/img/edit.png' /><a>&nbsp;&nbsp;<a href='{{ item.get_absolute_url }}delete/'><img src='/media/img/delete.png' /><a></td>
+	<td class='item_tools'><a href='{{ item.get_absolute_url }}edit/'><img src='/media/img/edit.png' /></a>&nbsp;&nbsp;<a href='{{ item.get_absolute_url }}delete/'><img src='/media/img/delete.png' /></a></td>
     </tr>
     {% endfor %}
 </table>

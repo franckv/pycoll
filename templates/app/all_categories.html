@@ -1,6 +1,6 @@
 <ul>
     <li><a href='{% url app.views.all_categories %}'>All</a></li>
     {% for category in all_categories %}
-    <li><a href='{{category.get_absolute_url}}'>{{ category }}</a></li>
+    <li id='{{ category }}'><a href='{{category.get_absolute_url}}'>{{ category }}</a></li>
     {% endfor %}
 </ul>

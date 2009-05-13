@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load app_extras %}
+
+{% block title %}Collection Manager{% endblock %}
+
+{% block content %}
+
+<h1>{{ performer }}</h1>
+
+<div id='picture'>
+</div>
+
+<div id='details'>
+    <table>
+	<tr>
+	    <td>Id</td>
+	    <td>{{ performer.pk }}</td>
+	</tr>
+	<tr>
+	    <td>First Name</td>
+	    <td>{{ performer.person.first_name}}</td>
+	</tr>
+	<tr>
+	    <td>Last Name</td>
+	    <td>{{ performer.person.last_name }}</td>
+	</tr>
+
+	<tr>
+	    <td>Type</td>
+	    <td>{{ performer.type.name }}</td>
+	</tr>
+    </table>
+</div>
+<br />
+<div id='actions'>
+    <a href='{{performer.get_absolute_url}}edit/'>Edit</a> - <a href='{{performer.get_absolute_url}}delete/'>Delete</a>
+</div>
+{% endblock %}
+

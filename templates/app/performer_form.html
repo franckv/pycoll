@@ -7,20 +7,15 @@
 
 {% block content %}
 
-{% if item %}
-<h1>{{ item.name }}</h1>
-<form action='{% url app.views.item_edit item.pk %}' METHOD='post'>
+{% if performer %}
+<h1>{{ performer }}</h1>
+<form action='{% url app.views.performer_edit performer.pk %}' METHOD='post'>
 {% else %}
-<h1>Add new item</h1>
-<form action='{% url app.views.item_add %}' method='post'>
+<h1>Add new performer</h1>
+<form action='{% url app.views.performer_add %}' method='post'>
 {% endif %}
 
     {{ form.as_p }}
-
-    {% if item %}
-    <p><label>Roles</label>{% get_roles item %}</p>
-    {% endif %}
-
     <input type='submit' value='save' />
 </form>
 {% endblock %}

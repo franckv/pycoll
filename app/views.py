@@ -5,9 +5,8 @@ from django.http import HttpResponseRedirect
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.core.urlresolvers import reverse
 
-from app.models import Item, ItemType, CD, DVD
-from app.forms import ItemForm, CDForm, DVDForm
-
+from app.models import Item, ItemType, CD, DVD, Performer, PerformerType, Person, Group, Role
+from app.forms import ItemForm, CDForm, DVDForm, PerformerForm, PersonForm, GroupForm, RoleForm
 
 def home(request):
     return items(request)
@@ -50,12 +49,7 @@ def item_delete_force(request, item_id):
 def item_edit(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
     itemtype = item.type
-    if itemtype.name == 'CD':
-	formType = CDForm
-    elif itemtype.name == 'DVD':
-	formType = DVDForm
-    else:
-	formType = ItemForm
+    formType = ItemForm.get_form(itemtype)
 
     if request.method == 'POST':
 	form = formType(request.POST)
@@ -102,6 +96,91 @@ def items_import(request):
 	    return items(request)
     else:
 	return render_to_response('app/items_import.html')
+
+def performer(request, performer_id):
+    performer = get_object_or_404(Performer, pk=performer_id)
+    return render_to_response('app/performer_view.html', {'performer': performer})
+
+def performer_edit(request, performer_id):
+    performer = get_object_or_404(Performer, pk=performer_id)
+    performertype = performer.type
+    formType = PerformerForm.get_form(performertype)
+
+    if (performertype.name == 'Person'):
+	performer = performer.person
+    else:
+	performer = performer.group
+
+    if request.method == 'POST':
+	form = formType(request.POST)
+	if form.is_valid():
+	    if (performertype.name == 'Person'):
+		performer.first_name = form.cleaned_data['first_name']
+		performer.last_name = form.cleaned_data['last_name']
+	    else:
+		performer.group.name = form.cleaned_data['name']
+	    performer.save()
+	    return HttpResponseRedirect(performer.get_absolute_url())
+    else:
+	form = formType(instance = performer)
+
+    return render_to_response('app/performer_form.html', {'performer': performer, 'form': form})
+
+def performer_add(request):
+    performertype = get_object_or_404(PerformerType, name='Person')
+    formType = PerformerForm.get_form(performertype)
+
+    if request.method == 'POST':
+	form = formType(request.POST)
+	if form.is_valid():
+	    performer = Performer.new(performertype)
+	    if (performertype.name == 'Person'):
+		performer.first_name = form.cleaned_data['first_name']
+		performer.last_name = form.cleaned_data['last_name']
+	    else:
+		performer.name = form.cleaned_data['name']
+	    performer.save()
+	    return HttpResponseRedirect(performer.get_absolute_url())
+
+    else:
+	form = formType()
+
+    return render_to_response('app/performer_form.html', {'performer': None, 'form': form})
+
+def role(request, role_id):
+    role = get_object_or_404(Role, pk=role_id)
+    return render_to_response('app/role_view.html', {'role': role})
+
+def role_edit(request, role_id):
+    role = get_object_or_404(Role, pk=role_id)
+
+    if request.method == 'POST':
+	form = RoleForm(request.POST)
+	if form.is_valid():
+	    role.item = form.cleaned_data['item']
+	    role.type = form.cleaned_data['type']
+	    role.performer = form.cleaned_data['performer']
+	    role.save()
+	    return HttpResponseRedirect(role.get_absolute_url())
+    else:
+	form = RoleForm(instance = role)
+
+    return render_to_response('app/role_form.html', {'role': role, 'form': form})
+
+def role_add(request):
+    if request.method == 'POST':
+	form = RoleForm(request.POST)
+	if form.is_valid():
+	    role = Role()
+	    role.item = form.cleaned_data['item']
+	    role.type = form.cleaned_data['type']
+	    role.performer = form.cleaned_data['performer']
+	    role.save()
+	    return HttpResponseRedirect(role.get_absolute_url())
+    else:
+	form = RoleForm()
+
+    return render_to_response('app/role_form.html', {'role': None, 'form': form})
 
 def category(request, type_id):
     item_list = Item.objects.filter(type=type_id)

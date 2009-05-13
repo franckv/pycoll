@@ -82,6 +82,12 @@ table a
 	padding-right: 0;
 }
 
+.roles a
+{
+	padding-left: 0;
+	padding-right: 0;
+}
+
 #page {
 width: 800px;
 height: 100%;
@@ -113,12 +119,35 @@ li#home {
 	list-style-image: url(../img/house.png);
 }
 
+li#admin {
+	list-style-image: url(../img/system.png);
+}
+
 li#links {
 	list-style-image: url(../img/heart.png);
 }
 
 li#about {
-	list-style-image: url(../img/information.png);
+	list-style-image: url(../img/help.png);
+}
+
+li#item_add {
+	list-style-image: url(../img/add.png);
+}
+
+li#performer_add {
+	list-style-image: url(../img/add.png);
+}
+
+li#search {
+	list-style-image: url(../img/search.png);
+}
+
+li#import {
+	list-style-image: url(../img/import.png);
+}
+
+li#CD {
 }
 
 #sidebar {
