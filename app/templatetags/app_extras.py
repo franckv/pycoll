@@ -1,6 +1,6 @@
 from django import template
 from CollMan.app.models import ItemType, Role
-import os
+import os,sys
 
 register = template.Library()
 
@@ -17,7 +17,7 @@ def select_categories(name, default):
 @register.inclusion_tag('app/item_cover.html')
 def get_cover(item):
     default = '/media/covers/item_default.png'
-    if item.cover == None or item.cover.name == '':
+    if item.cover is None or not item.cover.name or not os.path.exists(item.cover.path):
 	return {'coverurl': default}
     else:
 	return {'coverurl': item.cover.url}
