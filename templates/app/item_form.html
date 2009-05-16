@@ -10,12 +10,31 @@
 {% if item %}
 <h1>{{ item.name }}</h1>
 <form enctype="multipart/form-data" action='{% url app.views.item_edit item.pk %}' METHOD='post'>
+    {% get_cover item %}
 {% else %}
 <h1>Add new item</h1>
+{% if type %}
+<form enctype="multipart/form-data" action='{% url app.views.item_type_add type.pk %}' method='post'>
+{% else %}
 <form enctype="multipart/form-data" action='{% url app.views.item_add %}' method='post'>
 {% endif %}
+{% endif %}
 
-    {{ form.as_p }}
+    {% for field in form %}
+	{% ifequal field.label 'Type' %}
+	    {% if not item %}
+		<p>
+		    {{ field.errors }}
+		    {{ field.label_tag }}: {{ field }}
+		</p>
+	    {% endif %}
+	{% else %}
+	    <p>
+		{{ field.errors }}
+		{{ field.label_tag }}: {{ field }}
+	    </p>
+	{% endifequal %}
+    {% endfor %}
 
     {% if item %}
     <p><label>Roles</label>{% get_roles item %}</p>

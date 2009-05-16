@@ -55,8 +55,6 @@ def item_edit(request, item_id):
     itemtype = item.type
     formType = ItemForm.get_form(itemtype)
 
-    sys.stdout.write('edit\n')
-    
     if request.method == 'POST':
 	form = formType(request.POST, request.FILES)
 	if form.is_valid():
@@ -80,7 +78,14 @@ def item_edit(request, item_id):
     return render_to_response('app/item_form.html', {'item': item, 'form': form})
 
 def item_add(request):
-    itemtype = get_object_or_404(ItemType, name='DVD')
+    return item_type_add(request, None)
+
+def item_type_add(request, type_id):
+    if type_id is not None:
+	itemtype = get_object_or_404(ItemType, pk=type_id)
+    else:
+	itemtype = None
+
     formType = ItemForm.get_form(itemtype)
 
     if request.method == 'POST':
@@ -105,9 +110,9 @@ def item_add(request):
 	    item.save()
 	    return HttpResponseRedirect(item.get_absolute_url())
     else:
-	form = formType()
+	form = formType(initial={'type': type_id})
 
-    return render_to_response('app/item_form.html', {'item': None, 'form': form})
+    return render_to_response('app/item_form.html', {'item': None, 'type': itemtype, 'form': form})
 
 def items_import(request):
     if request.method == 'POST':
@@ -150,7 +155,14 @@ def performer_edit(request, performer_id):
     return render_to_response('app/performer_form.html', {'performer': performer, 'form': form})
 
 def performer_add(request):
-    performertype = get_object_or_404(PerformerType, name='Person')
+    return performer_type_add(request, None)
+
+def performer_type_add(request, type_id):
+    if type_id is not None:
+	performertype = get_object_or_404(PerformerType, pk=type_id)
+    else:
+	performertype = None
+
     formType = PerformerForm.get_form(performertype)
 
     if request.method == 'POST':
@@ -166,9 +178,9 @@ def performer_add(request):
 	    return HttpResponseRedirect(performer.get_absolute_url())
 
     else:
-	form = formType()
+	form = formType(initial={'type': type_id})
 
-    return render_to_response('app/performer_form.html', {'performer': None, 'form': form})
+    return render_to_response('app/performer_form.html', {'performer': None, 'type': performertype, 'form': form})
 
 def role(request, role_id):
     role = get_object_or_404(Role, pk=role_id)
@@ -191,23 +203,9 @@ def role_edit(request, role_id):
     return render_to_response('app/role_form.html', {'role': role, 'form': form})
 
 def role_add(request):
-    if request.method == 'POST':
-	form = RoleForm(request.POST)
-	if form.is_valid():
-	    role = Role()
-	    role.item = form.cleaned_data['item']
-	    role.type = form.cleaned_data['type']
-	    role.performer = form.cleaned_data['performer']
-	    role.save()
-	    return HttpResponseRedirect(role.get_absolute_url())
-    else:
-	form = RoleForm()
-
-    return render_to_response('app/role_form.html', {'role': None, 'form': form})
+    return role_item_add(request, None)
 
 def role_item_add(request, item_id):
-    item = get_object_or_404(Item, pk=item_id)
-
     if request.method == 'POST':
 	form = RoleForm(request.POST)
 	if form.is_valid():
@@ -216,9 +214,9 @@ def role_item_add(request, item_id):
 	    role.type = form.cleaned_data['type']
 	    role.performer = form.cleaned_data['performer']
 	    role.save()
-	    return HttpResponseRedirect(role.get_absolute_url())
+	    return HttpResponseRedirect(role.item.get_absolute_url())
     else:
-	form = RoleForm(initial={'item': item.pk})
+	form = RoleForm(initial={'item': item_id})
 
     return render_to_response('app/role_form.html', {'role': None, 'form': form})
 

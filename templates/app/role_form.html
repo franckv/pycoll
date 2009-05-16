@@ -20,7 +20,7 @@
 	{{ field.errors }}
 	{{ field.label_tag }}: {{ field }}
     {% ifequal field.label 'Performer'%}
-    <a href='{% url app.views.performer_add %}'><img src='/media/img/add.png' /></a>
+    <a href='{% url app.views.performer_add %}' target='_blank'><img src='/media/img/add.png' /></a>
     {% endifequal %}
 
     </p>
