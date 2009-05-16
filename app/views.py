@@ -5,8 +5,12 @@ from django.http import HttpResponseRedirect
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.core.urlresolvers import reverse
 
+from settings import MEDIA_ROOT
+
 from app.models import Item, ItemType, CD, DVD, Performer, PerformerType, Person, Group, Role
 from app.forms import ItemForm, CDForm, DVDForm, PerformerForm, PersonForm, GroupForm, RoleForm
+
+import sys
 
 def home(request):
     return items(request)
@@ -51,14 +55,23 @@ def item_edit(request, item_id):
     itemtype = item.type
     formType = ItemForm.get_form(itemtype)
 
+    sys.stdout.write('edit\n')
+    
     if request.method == 'POST':
-	form = formType(request.POST)
+	form = formType(request.POST, request.FILES)
 	if form.is_valid():
 	    item.name = form.cleaned_data['name']
 	    item.type = form.cleaned_data['type']
 	    item.description = form.cleaned_data['description']
 	    item.release_date = form.cleaned_data['release_date']
 	    item.update_date = datetime.datetime.now()
+	    if request.FILES.has_key('cover'):
+		filename = 'item_' + item_id + '.png'
+		dest = open(MEDIA_ROOT + 'covers/' + filename, 'wb+')
+		for chunk in request.FILES['cover'].chunks():
+		    dest.write(chunk)
+		dest.close()
+		item.cover = 'covers/' + filename
 	    item.save()
 	    return HttpResponseRedirect(item.get_absolute_url())
     else:
@@ -71,7 +84,7 @@ def item_add(request):
     formType = ItemForm.get_form(itemtype)
 
     if request.method == 'POST':
-	form = formType(request.POST)
+	form = formType(request.POST, request.FILES)
 	if form.is_valid():
 	    item = Item.new(itemtype)
 	    item.name = form.cleaned_data['name']
@@ -79,6 +92,16 @@ def item_add(request):
 	    item.release_date = form.cleaned_data['release_date']
 	    item.creation_date = datetime.datetime.now()
 	    item.update_date = datetime.datetime.now()
+	    if request.FILES.has_key('cover'):
+		filename = 'item_' + item_id + '.png'
+		dest = open(MEDIA_ROOT + 'covers/' + filename, 'wb+')
+		for chunk in request.FILES['cover'].chunks():
+		    dest.write(chunk)
+		dest.close()
+		item.cover = 'covers/' + filename
+	    else:
+		item.cover = 'covers/item_default.png'
+
 	    item.save()
 	    return HttpResponseRedirect(item.get_absolute_url())
     else:

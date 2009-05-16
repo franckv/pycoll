@@ -1,6 +1,5 @@
 from django import template
 from CollMan.app.models import ItemType, Role
-from CollMan.settings import CACHE_ROOT
 import os
 
 register = template.Library()
@@ -17,14 +16,11 @@ def select_categories(name, default):
 
 @register.inclusion_tag('app/item_cover.html')
 def get_cover(item):
-    filename = 'item_' + str(item.pk) + '.png'
-    path = CACHE_ROOT + 'covers/' + filename
-    url = '/covers/' + filename
-    default = '/covers/item_default.png'
-    if os.path.exists(path):
-	return {'coverurl': url}
-    else:
+    default = '/media/covers/item_default.png'
+    if item.cover == None or item.cover.name == '':
 	return {'coverurl': default}
+    else:
+	return {'coverurl': item.cover.url}
 
 @register.inclusion_tag('app/item_roles.html')
 def get_roles(item):

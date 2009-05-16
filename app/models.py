@@ -74,6 +74,7 @@ class Item(models.Model):
     creation_date = models.DateTimeField(editable=False)
     update_date = models.DateTimeField(editable=False)
     roles = models.ManyToManyField(Performer, through='Role', blank=True, editable=False)
+    cover = models.FileField(upload_to='covers', blank=True)
 
     @models.permalink
     def get_absolute_url(self):

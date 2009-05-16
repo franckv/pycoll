@@ -9,10 +9,10 @@
 
 {% if item %}
 <h1>{{ item.name }}</h1>
-<form action='{% url app.views.item_edit item.pk %}' METHOD='post'>
+<form enctype="multipart/form-data" action='{% url app.views.item_edit item.pk %}' METHOD='post'>
 {% else %}
 <h1>Add new item</h1>
-<form action='{% url app.views.item_add %}' method='post'>
+<form enctype="multipart/form-data" action='{% url app.views.item_add %}' method='post'>
 {% endif %}
 
     {{ form.as_p }}
