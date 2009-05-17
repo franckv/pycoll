@@ -4,9 +4,7 @@ from app.widgets import CalendarWidget
 from django.core.urlresolvers import reverse
 
 class ItemForm(forms.ModelForm):
-    addurl = '/manager/items/add/'
-
-    type = forms.ModelChoiceField(ItemType.objects, widget=forms.Select(attrs={'onchange': 'eval(window.location="' + addurl + '" + this.value);'}))
+    release_date = forms.DateField(widget=CalendarWidget, required=False)
     def get_form(cls, itemtype):
 	if itemtype is None:
 	    formType = ItemForm
@@ -30,13 +28,10 @@ class CDForm(ItemForm):
 
 class DVDForm(ItemForm):
     description = forms.CharField(widget=forms.Textarea)
-    release_date = forms.DateField(widget=CalendarWidget, required=False)
     class Meta:
 	model = DVD
 
 class PerformerForm(forms.ModelForm):
-    type = forms.ModelChoiceField(PerformerType.objects, widget=forms.Select(attrs={'onchange': 'eval(window.location="/manager/performers/add/" + this.value);'}))
-
     def get_form(cls, performertype):
 	if performertype is None:
 	    formType = PerformerForm

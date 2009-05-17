@@ -47,6 +47,10 @@ def item_delete(request, item_id):
 
 def item_delete_force(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
+    roles = Role.objects.filter(item=item_id)
+    # unlink file to prevent its deletion
+    item.cover = None
+    item.save()
     item.delete()
     return HttpResponseRedirect(reverse('app.views.items'))
 
@@ -112,6 +116,8 @@ def item_type_add(request, type_id):
     else:
 	form = formType(initial={'type': type_id})
 
+    addurl = reverse('app.views.item_add')
+    form.fields['type'].widget.attrs['onchange'] = 'eval(window.location=\'' + addurl + '\' + this.value);'
     return render_to_response('app/item_form.html', {'item': None, 'type': itemtype, 'form': form})
 
 def items_import(request):
@@ -180,6 +186,8 @@ def performer_type_add(request, type_id):
     else:
 	form = formType(initial={'type': type_id})
 
+    addurl = reverse('app.views.performer_add')
+    form.fields['type'].widget.attrs['onchange'] = 'eval(window.location=\'' + addurl + '\' + this.value);'
     return render_to_response('app/performer_form.html', {'performer': None, 'type': performertype, 'form': form})
 
 def role(request, role_id):
