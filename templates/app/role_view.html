@@ -29,7 +29,7 @@
 </div>
 <br />
 <div id='actions'>
-    <a href='{{role.get_absolute_url}}edit/'>Edit</a> - <a href='{{role.get_absolute_url}}delete/'>Delete</a>
+    <a href='{% url app.views.role_edit role.pk %}'>Edit</a> - <a href='{% url app.views.role_delete role.pk %}'>Delete</a>
 </div>
 {% endblock %}
 

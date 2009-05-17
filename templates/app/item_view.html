@@ -5,7 +5,7 @@
 
 {% block content %}
 
-<h1>{{ item.name }}</h1>
+<h1>{{ item }}</h1>
 
 <div id='cover'>
     {% get_cover item %}
@@ -38,7 +38,7 @@
     </table>
 </div>
 <div id='actions'>
-    <a href='{{item.get_absolute_url}}edit/'>Edit</a> - <a href='{{item.get_absolute_url}}delete/'>Delete</a>
+    <a href='{% url app.views.item_edit item.pk %}'>Edit</a> - <a href='{% url app.views.item_delete item.pk %}'>Delete</a>
 </div>
 {% endblock %}
 

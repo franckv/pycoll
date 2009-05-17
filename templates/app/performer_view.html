@@ -41,7 +41,7 @@
 </div>
 <br />
 <div id='actions'>
-    <a href='{{performer.get_absolute_url}}edit/'>Edit</a> - <a href='{{performer.get_absolute_url}}delete/'>Delete</a>
+    <a href='{% url app.views.performer_edit performer.pk %}'>Edit</a> - <a href='{% url app.views.performer_delete performer.pk %}'>Delete</a>
 </div>
 {% endblock %}
 

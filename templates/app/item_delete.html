@@ -6,8 +6,8 @@
 
 <h1>Delete</h1>
 
-Confirm deletion of "{{ item.name }}" ?
-<a href='{{ item.get_absolute_url }}delete/force/'>Y</a> / <a href='{{ item.get_absolute_url }}'>N</a>
+Confirm deletion of "{{ item }}" ?
+<a href='{% url app.views.item_delete_force item.pk %}'>Y</a> / <a href='{{ item.get_absolute_url }}'>N</a>
 
 {% endblock %}
 
