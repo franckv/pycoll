@@ -47,7 +47,6 @@ def item_delete(request, item_id):
 
 def item_delete_force(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
-    roles = Role.objects.filter(item=item_id)
     # unlink file to prevent its deletion
     item.cover = None
     item.save()
@@ -190,6 +189,16 @@ def performer_type_add(request, type_id):
     form.fields['type'].widget.attrs['onchange'] = 'eval(window.location=\'' + addurl + '\' + this.value);'
     return render_to_response('app/performer_form.html', {'performer': None, 'type': performertype, 'form': form})
 
+def performer_delete(request, performer_id):
+    performer = get_object_or_404(Performer, pk=performer_id)
+    return render_to_response('app/performer_delete.html', {'performer': performer})
+
+def performer_delete_force(request, performer_id):
+    performer = get_object_or_404(Performer, pk=performer_id)
+    performer.delete()
+    return HttpResponseRedirect(reverse('app.views.items'))
+
+
 def role(request, role_id):
     role = get_object_or_404(Role, pk=role_id)
     return render_to_response('app/role_view.html', {'role': role})
@@ -227,6 +236,12 @@ def role_item_add(request, item_id):
 	form = RoleForm(initial={'item': item_id})
 
     return render_to_response('app/role_form.html', {'role': None, 'form': form})
+
+def role_delete(request, role_id):
+    role = get_object_or_404(Role, pk=role_id)
+    item_id = role.item.pk
+    role.delete()
+    return HttpResponseRedirect(reverse('app.views.item', args=[item_id]))
 
 def category(request, type_id):
     item_list = Item.objects.filter(type=type_id)

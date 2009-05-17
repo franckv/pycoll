@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Collection Manager{% endblock %}
+
+{% block content %}
+
+<h1>Delete</h1>
+
+Confirm deletion of "{{ performer }}" ?
+<a href='{% url app.views.performer_delete_force performer.pk %}'>Y</a> / <a href='{{ performer.get_absolute_url }}'>N</a>
+
+{% endblock %}
+
