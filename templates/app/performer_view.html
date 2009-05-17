@@ -16,6 +16,8 @@
 	    <td>Id</td>
 	    <td>{{ performer.pk }}</td>
 	</tr>
+
+	{% if performer.person %}
 	<tr>
 	    <td>First Name</td>
 	    <td>{{ performer.person.first_name}}</td>
@@ -24,6 +26,12 @@
 	    <td>Last Name</td>
 	    <td>{{ performer.person.last_name }}</td>
 	</tr>
+	{% else %}
+	    <tr>
+		<td>Name</td>
+		<td>{{ performer.group.name }}</td>
+	    </tr>
+	{% endif %}
 
 	<tr>
 	    <td>Type</td>
