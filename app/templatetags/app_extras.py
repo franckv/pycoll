@@ -1,5 +1,5 @@
 from django import template
-from CollMan.app.models import ItemType, Role
+from app.models import ItemType, Role
 import os,sys
 
 register = template.Library()
