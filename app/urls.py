@@ -1,4 +1,10 @@
 from django.conf.urls.defaults import *
+from django.contrib import admin
+from app.feeds import LatestAdds
+
+feeds = {
+    'adds': LatestAdds
+}
 
 urlpatterns = patterns('app.views',
     (r'^$', 'home'),
@@ -24,4 +30,9 @@ urlpatterns = patterns('app.views',
     (r'^roles/add/(?P<item_id>\d+)/$', 'role_item_add'),
     (r'^roles/add/$', 'role_add'),
     (r'^roles/(?P<role_id>\d+)/delete/$', 'role_delete'),
+)
+
+urlpatterns += patterns('',
+    (r'^admin/(.*)', admin.site.root),
+    (r'^feeds/(?P<url>.*)/$', 'django.contrib.syndication.views.feed', {'feed_dict': feeds}),
 )
