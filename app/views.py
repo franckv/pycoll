@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 from settings import MEDIA_ROOT
 
 from models import Item, ItemType, CD, DVD, Performer, PerformerType, Person, Group, Role
-from forms import ItemForm, CDForm, DVDForm, PerformerForm, PersonForm, GroupForm, RoleForm
+from forms import ItemForm, CDForm, DVDForm, PerformerForm, PersonForm, GroupForm, RoleForm, SearchForm
 
 import sys
 
@@ -35,7 +35,33 @@ def all_categories(request):
     return items(request)
 
 def items_search(request):
-    pass
+    if request.method == 'POST':
+	form = SearchForm(request.POST)
+	if form.is_valid():
+	    name = form.cleaned_data['name']
+	    type = form.cleaned_data['type']
+
+	    search_results = Item.objects.filter(name__contains = name)
+	    if type is not None:
+		search_results = search_results.filter(type__pk = type.pk)
+
+	    paginator = Paginator(search_results, 5)
+
+	    try:
+		page = int(request.GET.get('page', '1'))
+	    except ValueError:
+		page = 1
+
+	    try:
+		first_results = paginator.page(page)
+	    except (EmptyPage, InvalidPage):
+		first_results = paginator.page(paginator.num_pages)
+
+	    return render_to_response('app/items_search.html', {'form': form, 'items': first_results})
+    else:
+	form = SearchForm()
+
+    return render_to_response('app/items_search.html', {'form': form})
 
 def item(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
@@ -62,7 +88,6 @@ def item_edit(request, item_id):
 	form = formType(request.POST, request.FILES)
 	if form.is_valid():
 	    item.name = form.cleaned_data['name']
-	    item.type = form.cleaned_data['type']
 	    item.description = form.cleaned_data['description']
 	    item.release_date = form.cleaned_data['release_date']
 	    item.update_date = datetime.datetime.now()
@@ -78,6 +103,8 @@ def item_edit(request, item_id):
     else:
 	form = formType(instance = item)
 
+    # disabled fields are not submitted so we also add a hidden field for the type
+    form.fields['type'].widget.attrs['disabled'] = 'disabled'
     return render_to_response('app/item_form.html', {'item': item, 'form': form})
 
 def item_add(request):
@@ -100,8 +127,9 @@ def item_type_add(request, type_id):
 	    item.release_date = form.cleaned_data['release_date']
 	    item.creation_date = datetime.datetime.now()
 	    item.update_date = datetime.datetime.now()
+	    item.save()
 	    if request.FILES.has_key('cover'):
-		filename = 'item_' + item_id + '.png'
+		filename = 'item_' + str(item.pk) + '.png'
 		dest = open(MEDIA_ROOT + 'covers/' + filename, 'wb+')
 		for chunk in request.FILES['cover'].chunks():
 		    dest.write(chunk)
@@ -109,8 +137,8 @@ def item_type_add(request, type_id):
 		item.cover = 'covers/' + filename
 	    else:
 		item.cover = 'covers/item_default.png'
-
 	    item.save()
+
 	    return HttpResponseRedirect(item.get_absolute_url())
     else:
 	form = formType(initial={'type': type_id})

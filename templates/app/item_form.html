@@ -10,6 +10,7 @@
 {% if item %}
 <h1>{{ item.name }}</h1>
 <form enctype="multipart/form-data" action='{% url app.views.item_edit item.pk %}' METHOD='post'>
+    <input type='hidden' name='type' value='{{item.type.pk}}' />
     {% get_cover item %}
 {% else %}
 <h1>Add new item</h1>
@@ -21,26 +22,16 @@
 {% endif %}
 
     {% for field in form %}
-	{% ifequal field.label 'Type' %}
-	    {% if not item %}
-		<p>
-		    {{ field.errors }}
-		    {{ field.label_tag }}: {{ field }}
-		</p>
-	    {% endif %}
-	{% else %}
-	    <p>
-		{{ field.errors }}
-		{{ field.label_tag }}: {{ field }}
-	    </p>
-	{% endifequal %}
+	<p>
+	    {{ field.errors }}
+	    {{ field.label_tag }}: {{ field }}
+	</p>
     {% endfor %}
-
     {% if item %}
     <p><label>Roles</label>{% get_roles item %}</p>
     {% endif %}
 
-    <input type='submit' value='save' />
+    <input type='submit' value='Save' />
 </form>
 {% endblock %}
 

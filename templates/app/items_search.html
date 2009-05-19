@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load app_extras %}
+
+{% block title %}Collection Manager{% endblock %}
+
+{% block head %} {{ form.media }} {% endblock %}
+
+{% block content %}
+
+<h1>Search items</h1>
+<form action='{% url app.views.items_search %}' method='post'>
+    {{ form.as_p }}
+    <input type='submit' value='Search' />
+</form>
+<br />
+<hr />
+<br />
+{% if items %}
+
+<div class='pagination'>
+    <span>
+    {% if items.has_previous %}
+    <a href="?page={{ items.previous_page_number }}">&lt;&lt;</a>
+    {% endif %}
+    {{ items.number }}/{{ items.paginator.num_pages }}
+    {% if items.has_next %}
+    <a href="?page={{ items.next_page_number }}">&gt;&gt;</a>
+    {% endif %}
+    </span>
+</div>
+<div class='items'>
+    <table>
+    {% for item in items.object_list %}
+    <tr class='{% cycle 'odd' 'even' %}'>
+	<td class='item_cover'>{% get_cover item %}</td>
+	<td><a href='{{ item.get_absolute_url }}'>{{ item.name }}</a></td>
+	<td class='item_type'><a href='{{ item.type.get_absolute_url }}'>{{ item.type }}</a></td>
+	<td class='item_tools'><a href='{% url app.views.item_edit item.pk %}'><img src='/media/img/edit.png' /></a>&nbsp;&nbsp;<a href='{% url app.views.item_delete item.pk %}'><img src='/media/img/delete.png' /></a></td>
+    </tr>
+    {% endfor %}
+    </table>
+</div>
+{% else %}
+    No results
+{% endif %}
+{% endblock %}
+

@@ -60,3 +60,8 @@ class GroupForm(PerformerForm):
 class RoleForm(forms.ModelForm):
     class Meta:
 	model = Role
+
+class SearchForm(forms.Form):
+    name = forms.CharField(required=False)
+    type = forms.ModelChoiceField(ItemType.objects, required=False)
+
