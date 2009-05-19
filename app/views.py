@@ -7,8 +7,8 @@ from django.core.urlresolvers import reverse
 
 from settings import MEDIA_ROOT
 
-from app.models import Item, ItemType, CD, DVD, Performer, PerformerType, Person, Group, Role
-from app.forms import ItemForm, CDForm, DVDForm, PerformerForm, PersonForm, GroupForm, RoleForm
+from models import Item, ItemType, CD, DVD, Performer, PerformerType, Person, Group, Role
+from forms import ItemForm, CDForm, DVDForm, PerformerForm, PersonForm, GroupForm, RoleForm
 
 import sys
 

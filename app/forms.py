@@ -1,6 +1,6 @@
 from django import forms
-from app.models import Item, ItemType, CD, DVD, Performer, PerformerType, Person, Group, Role
-from app.widgets import CalendarWidget
+from models import Item, ItemType, CD, DVD, Performer, PerformerType, Person, Group, Role
+from widgets import CalendarWidget
 
 class ItemForm(forms.ModelForm):
     release_date = forms.DateField(widget=CalendarWidget, required=False)

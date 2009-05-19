@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 from django.contrib import admin
-from app.feeds import LatestAdds
+from feeds import LatestAdds
 
 feeds = {
     'adds': LatestAdds
