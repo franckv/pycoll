@@ -1,4 +1,6 @@
 import datetime
+import csv
+import logging
 
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect
@@ -10,7 +12,6 @@ from settings import MEDIA_ROOT
 from models import *
 from forms import *
 
-import sys, csv
 
 def home(request):
     return items(request)
@@ -35,6 +36,7 @@ def all_categories(request):
     return items(request)
 
 def items_search(request):
+    logging.debug('Search')
     if request.method == 'POST':
 	form = SearchForm(request.POST)
 	if form.is_valid():
