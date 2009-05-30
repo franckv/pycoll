@@ -17,6 +17,11 @@
 	    <td>{{ performer.pk }}</td>
 	</tr>
 
+	<tr>
+	    <td>Name</td>
+	    <td>{{ performer.name }}</td>
+	</tr>
+
 	{% if performer.person %}
 	<tr>
 	    <td>First Name</td>
@@ -27,10 +32,16 @@
 	    <td>{{ performer.person.last_name }}</td>
 	</tr>
 	{% else %}
-	    <tr>
-		<td>Name</td>
-		<td>{{ performer.group.name }}</td>
-	    </tr>
+	<tr>
+	    <td>Members</td>
+	    <td>
+		<ul>
+		{% for member in performer.group.members.all %}
+		<li><a href='{{ member.get_absolute_url }}'>{{ member }}</a></li>
+		{% endfor %}
+		</ul>
+	    </td>
+	</tr>
 	{% endif %}
 
 	<tr>
