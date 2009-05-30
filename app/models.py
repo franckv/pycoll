@@ -10,6 +10,7 @@ class PerformerType(models.Model):
 
 class Performer(models.Model):
     type = models.ForeignKey(PerformerType)
+    name = models.CharField(max_length=200, unique=True)
 
     def __unicode__(self):
 	if self.type.name == 'Person':
@@ -49,7 +50,6 @@ class Person(Performer):
 
 
 class Group(Performer):
-    name = models.CharField(max_length=200)
     members = models.ManyToManyField(Person)
 
     def __unicode__(self):
@@ -67,7 +67,7 @@ class ItemType(models.Model):
 	return self.name
 
 class Item(models.Model):
-    name =  models.CharField(max_length=255)
+    name =  models.CharField(max_length=255, unique=True)
     type = models.ForeignKey(ItemType)
     description =  models.CharField(max_length=255, blank=True)
     release_date = models.DateField(blank=True, null=True)
