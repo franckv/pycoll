@@ -65,3 +65,5 @@ class SearchForm(forms.Form):
     name = forms.CharField(required=False)
     type = forms.ModelChoiceField(ItemType.objects, required=False)
 
+class ImportForm(forms.Form):
+    file = forms.FileField()

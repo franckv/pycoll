@@ -7,10 +7,10 @@ from django.core.urlresolvers import reverse
 
 from settings import MEDIA_ROOT
 
-from models import Item, ItemType, CD, DVD, Performer, PerformerType, Person, Group, Role
-from forms import ItemForm, CDForm, DVDForm, PerformerForm, PersonForm, GroupForm, RoleForm, SearchForm
+from models import *
+from forms import *
 
-import sys
+import sys, csv
 
 def home(request):
     return items(request)
@@ -149,14 +149,42 @@ def item_type_add(request, type_id):
 
 def items_import(request):
     if request.method == 'POST':
-	try:
-	    pass
-	except (KeyError):
-	    return render_to_response('app/items_import.html')
-	else:
-	    return items(request)
+	form = ImportForm(request.POST, request.FILES)
+	if form.is_valid():
+	    if request.FILES.has_key('file'):
+		reader = csv.DictReader(request.FILES['file'], delimiter=';')
+		for line in reader:
+		    if line.has_key('type') and line.has_key('name'):
+			itemtypes = ItemType.objects.filter(name=line['type'])
+			if len(itemtypes) != 1:
+			    continue
+			itemtype = itemtypes[0]
+
+			item = Item.new(itemtype)
+			item.creation_date = datetime.datetime.now()
+			item.update_date = datetime.datetime.now()
+			for col in line.keys():
+			    if col == 'name' or col == 'description':
+				item.__setattr__(col, line[col])
+
+			item.save()
+
+			for col in line.keys():
+			    roletypes = RoleType.objects.filter(name__iexact=col)
+			    if len(roletypes) == 1:
+				performers = Performer.objects.filter(name__iexact=line[col])
+				if len(performers) == 1:
+				    role = Role()
+				    role.item = item
+				    role.type = roletypes[0]
+				    role.performer = performers[0]
+				    role.save()
+
+		return HttpResponseRedirect(reverse('app.views.items'))
     else:
-	return render_to_response('app/items_import.html')
+	form = ImportForm()
+
+    return render_to_response('app/items_import.html', {'form': form})
 
 def performer(request, performer_id):
     performer = get_object_or_404(Performer, pk=performer_id)
@@ -202,11 +230,10 @@ def performer_type_add(request, type_id):
 	form = formType(request.POST)
 	if form.is_valid():
 	    performer = Performer.new(performertype)
+	    performer.name = form.cleaned_data['name']
 	    if (performertype.name == 'Person'):
 		performer.first_name = form.cleaned_data['first_name']
 		performer.last_name = form.cleaned_data['last_name']
-	    else:
-		performer.name = form.cleaned_data['name']
 	    performer.save()
 	    return HttpResponseRedirect(performer.get_absolute_url())
 

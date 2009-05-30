@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load app_extras %}
+
+{% block title %}Collection Manager{% endblock %}
+
+{% block head %} {{ form.media }} {% endblock %}
+
+{% block content %}
+
+<h1>Import file</h1>
+<form enctype="multipart/form-data" action='{% url app.views.items_import %}' METHOD='post'>
+    {% for field in form %}
+	<p>
+	    {{ field.errors }}
+	    {{ field.label_tag }}: {{ field }}
+	</p>
+    {% endfor %}
+    <p>
+	<input type='submit' value='Save' />
+    </p>
+</form>
+{% endblock %}
+
