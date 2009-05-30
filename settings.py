@@ -33,6 +33,8 @@ SITE_ID = 1
 # to load the internationalization machinery.
 USE_I18N = True
 
+INTERNAL_IPS = ('127.0.0.1',)
+
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
 MEDIA_ROOT = '/home/franck/Dev/Maestro/media/'
@@ -61,6 +63,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'Maestro.urls'
@@ -78,5 +81,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.admin',
+    'debug_toolbar',
     'Maestro.app',
 )
