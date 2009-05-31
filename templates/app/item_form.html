@@ -3,7 +3,28 @@
 
 {% block title %}Collection Manager{% endblock %}
 
-{% block head %} {{ form.media }} {% endblock %}
+{% block head %}
+    {{ form.media }}
+    <script>
+	$(function() {
+	    $("#id_tags").autocomplete('{% url app.views.lookup_tags %}', {
+		width: 150,
+		max: 10,
+		highlight: false,
+		multiple: true,
+		multipleSeparator: " ",
+		scroll: true,
+		scrollHeight: 300,
+		matchContains: true,
+		autoFill: true,
+		extraParams: {val: function() {
+			return document.getElementById('id_tags').value;
+		    }
+		},
+	    });
+	});
+    </script>
+{% endblock %}
 
 {% block content %}
 

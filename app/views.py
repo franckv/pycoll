@@ -3,7 +3,8 @@ import csv
 import logging
 
 from django.shortcuts import render_to_response, get_object_or_404
-from django.http import HttpResponseRedirect
+from django.utils import simplejson
+from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.core.urlresolvers import reverse
 
@@ -12,6 +13,8 @@ from models import *
 from forms import *
 import tagging
 from tagging.models import Tag
+
+logging.basicConfig(filename='/tmp/django.log', level=logging.DEBUG)
 
 def home(request):
     logging.debug('home')
@@ -319,3 +322,20 @@ def category(request, type_id):
 	first_item_list = paginator.page(paginator.num_pages)
 
     return render_to_response('app/items.html', {'items': first_item_list})
+
+def lookup_tags(request):
+    logging.debug('lookup_tags')
+    results = ''
+    if request.method == "GET":
+	if request.GET.has_key(u'q'):
+	    value = request.GET[u'q']
+	    logging.debug(value)
+
+	    if request.GET.has_key(u'val'):
+		full = request.GET[u'val']
+		logging.debug(full)
+		current_tags = tagging.utils.parse_tag_input(full)
+	    for tag in Tag.objects.usage_for_model(Item):
+		if tag.name.startswith(value) and not tag.name in current_tags:
+		    results += '%s|%s\n' % (tag.name, tag.name)
+    return HttpResponse(results, mimetype='text/html')

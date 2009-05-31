@@ -30,6 +30,7 @@ urlpatterns = patterns('app.views',
     (r'^roles/add/(?P<item_id>\d+)/$', 'role_item_add'),
     (r'^roles/add/$', 'role_add'),
     (r'^roles/(?P<role_id>\d+)/delete/$', 'role_delete'),
+    (r'^lookup/tags/$', 'lookup_tags'),
 )
 
 urlpatterns += patterns('',

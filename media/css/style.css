@@ -195,6 +195,22 @@ background: transparent url(../img/page_white_stack.png) no-repeat scroll 8px 4p
 margin-bottom:10px;
 }
 
+#tags .tag1 a {
+    font-size: 12px;
+}
+
+#tags .tag2 a {
+    font-size: 14px;
+}
+
+#tags .tag3 a {
+    font-size: 16px;
+}
+
+#tags .tag4 a {
+    font-size: 18px;
+}
+
 #feeds {
 margin-bottom:10px;
 padding: 5px;
