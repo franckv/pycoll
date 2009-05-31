@@ -82,5 +82,6 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.admin',
     'debug_toolbar',
+    'tagging',
     'Maestro.app',
 )

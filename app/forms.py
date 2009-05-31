@@ -4,6 +4,8 @@ from widgets import CalendarWidget
 
 class ItemForm(forms.ModelForm):
     release_date = forms.DateField(widget=CalendarWidget, required=False)
+    tags = forms.CharField(required=False)
+
     def get_form(cls, itemtype):
 	if itemtype is None:
 	    formType = ItemForm

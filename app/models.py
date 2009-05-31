@@ -1,4 +1,5 @@
 from django.db import models
+from tagging.fields import TagField
 
 # Create your models here.
 
@@ -10,7 +11,7 @@ class PerformerType(models.Model):
 
 class Performer(models.Model):
     type = models.ForeignKey(PerformerType)
-    name = models.CharField(max_length=200, unique=True)
+    name = models.CharField(max_length=200)
 
     def __unicode__(self):
 	if self.type.name == 'Person':
@@ -67,7 +68,7 @@ class ItemType(models.Model):
 	return self.name
 
 class Item(models.Model):
-    name =  models.CharField(max_length=255, unique=True)
+    name =  models.CharField(max_length=255)
     type = models.ForeignKey(ItemType)
     description =  models.CharField(max_length=255, blank=True)
     release_date = models.DateField(blank=True, null=True)

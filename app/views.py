@@ -8,12 +8,13 @@ from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.core.urlresolvers import reverse
 
 from settings import MEDIA_ROOT
-
 from models import *
 from forms import *
-
+import tagging
+from tagging.models import Tag
 
 def home(request):
+    logging.debug('home')
     return items(request)
 
 def items(request):
@@ -36,12 +37,13 @@ def all_categories(request):
     return items(request)
 
 def items_search(request):
-    logging.debug('Search')
+    logging.debug('item_search')
     if request.method == 'POST':
 	form = SearchForm(request.POST)
 	if form.is_valid():
 	    name = form.cleaned_data['name']
 	    type = form.cleaned_data['type']
+	    logging.debug('name=%s, type=%s' % (name,type))
 
 	    search_results = Item.objects.filter(name__contains = name)
 	    if type is not None:
@@ -93,6 +95,8 @@ def item_edit(request, item_id):
 	    item.description = form.cleaned_data['description']
 	    item.release_date = form.cleaned_data['release_date']
 	    item.update_date = datetime.datetime.now()
+	    Tag.objects.update_tags(item, form.cleaned_data['tags'])
+
 	    if request.FILES.has_key('cover'):
 		filename = 'item_' + item_id + '.png'
 		dest = open(MEDIA_ROOT + 'covers/' + filename, 'wb+')
@@ -103,7 +107,7 @@ def item_edit(request, item_id):
 	    item.save()
 	    return HttpResponseRedirect(item.get_absolute_url())
     else:
-	form = formType(instance = item)
+	form = formType(instance = item, initial={'tags': tagging.utils.edit_string_for_tags(Tag.objects.get_for_object(item))})
 
     # disabled fields are not submitted so we also add a hidden field for the type
     form.fields['type'].widget.attrs['disabled'] = 'disabled'

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load app_extras %}
+{% load tagging_tags %}
 
 {% block title %}Collection Manager{% endblock %}
 
@@ -36,6 +37,15 @@
 	    </td>
 	</tr>
     </table>
+</div>
+<div id='tags'>
+    Tags
+    {% tags_for_object item as tags %}
+    <ul>
+    {% for tag in tags %}
+    <li>{{ tag }}</li>
+    {% endfor %}
+    </ul>
 </div>
 <div id='actions'>
     <a href='{% url app.views.item_edit item.pk %}'>Edit</a> - <a href='{% url app.views.item_delete item.pk %}'>Delete</a>
