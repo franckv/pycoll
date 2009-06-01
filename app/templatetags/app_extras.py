@@ -18,9 +18,9 @@ def select_categories(name, default):
 def get_cover(item):
     default = '/media/covers/item_default.png'
     if item.cover is None or not item.cover.name or not os.path.exists(item.cover.path):
-	return {'coverurl': default}
+	return {'coverurl': default, 'item': item}
     else:
-	return {'coverurl': item.cover.url}
+	return {'coverurl': item.cover.url, 'item': item}
 
 @register.inclusion_tag('app/item_roles.html')
 def get_roles(item):

@@ -4,6 +4,17 @@
 
 {% block title %}Collection Manager{% endblock %}
 
+{% block head %}
+<script>
+    $(function() {
+	$('#cover a').lightBox({
+	    imageBtnClose: '/media/img/lightbox-btn-close.gif',	
+	    imageLoading: '/media/img/lightbox-ico-loading.gif',	
+	});
+    });
+</script>
+{% endblock %}
+
 {% block content %}
 
 <h1>{{ item }}</h1>
@@ -41,7 +52,7 @@
 	    <td>
 		{% tags_for_object item as tags %}
 		{% for tag in tags %}
-		<a>{{ tag }}</a>
+		<a href='{% url app.views.tag tag.pk %}'>{{ tag }}</a>
 		{% endfor %}
 	    </td>
 	</tr>

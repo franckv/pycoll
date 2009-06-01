@@ -3,6 +3,19 @@
 
 {% block title %}Collection Manager{% endblock %}
 
+{% block head %}
+<script>
+    $(function() {
+	$('.item_cover a').lightBox({
+	    imageBtnClose: '/media/img/lightbox-btn-close.gif',	
+	    imageBtnPrev: '/media/img/lightbox-btn-prev.gif',	
+	    imageBtnNext: '/media/img/lightbox-btn-next.gif',	
+	    imageLoading: '/media/img/lightbox-ico-loading.gif',	
+	});
+    });
+</script>
+{% endblock %}
+
 {% block content %}
 
 <h1>Items</h1>
