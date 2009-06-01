@@ -2,6 +2,6 @@
 
 {% tag_cloud_for_model app.Item as tag_list with steps=4 %}
 {% for tag in tag_list %}
-<span class="tag{{ tag.font_size }}"><a href='#' title='{{ tag.count }}'>{{ tag }}</a></span>
+<span class="tag{{ tag.font_size }}"><a href='{% url app.views.tag tag.pk %}' title='{{ tag.count }}'>{{ tag }}</a></span>
 {% endfor %}
 

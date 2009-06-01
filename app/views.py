@@ -12,7 +12,7 @@ from settings import MEDIA_ROOT
 from models import *
 from forms import *
 import tagging
-from tagging.models import Tag
+from tagging.models import Tag, TaggedItem
 
 logging.basicConfig(filename='/tmp/django.log', level=logging.DEBUG)
 
@@ -309,6 +309,23 @@ def role_delete(request, role_id):
 
 def category(request, type_id):
     item_list = Item.objects.filter(type=type_id)
+    paginator = Paginator(item_list, 5)
+
+    try:
+	page = int(request.GET.get('page', '1'))
+    except ValueError:
+	page = 1
+
+    try:
+	first_item_list = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+	first_item_list = paginator.page(paginator.num_pages)
+
+    return render_to_response('app/items.html', {'items': first_item_list})
+
+def tag(request, tag_id):
+    tag = get_object_or_404(Tag, pk=tag_id)
+    item_list = TaggedItem.objects.get_by_model(Item, tag)
     paginator = Paginator(item_list, 5)
 
     try:
