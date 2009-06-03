@@ -1,5 +1,5 @@
 from django import template
-from app.models import ItemType, Role
+from app.models import Item, ItemType, Role, Performer
 import os,sys
 
 register = template.Library()
@@ -23,6 +23,12 @@ def get_cover(item):
 	return {'coverurl': item.cover.url, 'item': item}
 
 @register.inclusion_tag('app/item_roles.html')
-def get_roles(item):
+def get_item_roles(item):
     roles = Role.objects.filter(item__pk=item.pk)
     return {'roles': roles, 'item': item}
+
+@register.inclusion_tag('app/performer_roles.html')
+def get_performer_roles(performer):
+    roles = Role.objects.filter(performer__pk=performer.pk)
+    return {'roles': roles, 'performer': performer}
+

@@ -48,6 +48,12 @@
 	    <td>Type</td>
 	    <td>{{ performer.type.name }}</td>
 	</tr>
+	<tr>
+	    <td>Roles</td>
+	    <td>
+		{% get_performer_roles performer %}
+	    </td>
+	</tr>
     </table>
 </div>
 <br />
