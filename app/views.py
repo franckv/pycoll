@@ -182,13 +182,20 @@ def items_import(request):
 			    roletypes = RoleType.objects.filter(name__iexact=col)
 			    if len(roletypes) == 1:
 				performers = Performer.objects.filter(name__iexact=line[col])
-				if len(performers) == 1:
-				    role = Role()
-				    role.item = item
-				    role.type = roletypes[0]
-				    role.performer = performers[0]
-				    role.save()
+				if len(performers) == 0:
+				    performer = Group()
+				    performer.type = get_object_or_404(PerformerType, name='Group')
+				    performer.name = line[col]
+				    performer.save()
+				else:
+				    performer = performers[0]
 
+				role = Role()
+				role.item = item
+				role.type = roletypes[0]
+				role.performer = performer
+				role.save()
+				
 		return HttpResponseRedirect(reverse('app.views.items'))
     else:
 	form = ImportForm()
@@ -308,6 +315,7 @@ def role_delete(request, role_id):
     return HttpResponseRedirect(reverse('app.views.item', args=[item_id]))
 
 def category(request, type_id):
+    itemtype = get_object_or_404(ItemType, pk=type_id)
     item_list = Item.objects.filter(type=type_id)
     paginator = Paginator(item_list, 5)
 
@@ -321,7 +329,7 @@ def category(request, type_id):
     except (EmptyPage, InvalidPage):
 	first_item_list = paginator.page(paginator.num_pages)
 
-    return render_to_response('app/items.html', {'items': first_item_list})
+    return render_to_response('app/items.html', {'items': first_item_list, 'header': 'with category ' + itemtype.name})
 
 def tag(request, tag_id):
     tag = get_object_or_404(Tag, pk=tag_id)
@@ -338,7 +346,7 @@ def tag(request, tag_id):
     except (EmptyPage, InvalidPage):
 	first_item_list = paginator.page(paginator.num_pages)
 
-    return render_to_response('app/items.html', {'items': first_item_list})
+    return render_to_response('app/items.html', {'items': first_item_list, 'header': 'tagged with ' + tag.name})
 
 def lookup_tags(request):
     logging.debug('lookup_tags')
