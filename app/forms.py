@@ -60,6 +60,8 @@ class GroupForm(PerformerForm):
 	model = Group
 
 class RoleForm(forms.ModelForm):
+    item = forms.ModelChoiceField(queryset=Item.objects.all().order_by('name'))
+    performer = forms.ModelChoiceField(queryset=Performer.objects.all().order_by('name'))
     class Meta:
 	model = Role
 
