@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if form.errors %}
+<p class="error">Sorry, that's not a valid username or password</p>
+{% endif %}
+
+<form action="" method="post">
+    <p>
+    <label for="username">User name:</label>
+    <input type="text" name="username" value="" id="username">
+    </p>
+    <p>
+    <label for="password">Password:</label>
+    <input type="password" name="password" value="" id="password">
+    </p>
+    <p>
+    <input type="submit" value="login" />
+    {% if next %}
+    <input type="hidden" name="next" value="{{ next|escape }}" />
+    {% else %}
+    <input type="hidden" name="next" value="{% url app.views.items %}" />
+    {% endif %}
+    </p>
+</form>
+
+{% endblock %}
+

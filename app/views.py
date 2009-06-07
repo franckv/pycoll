@@ -7,6 +7,8 @@ from django.utils import simplejson
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
+from django.template import RequestContext
 
 from settings import MEDIA_ROOT
 from models import *
@@ -16,10 +18,12 @@ from tagging.models import Tag, TaggedItem
 
 logging.basicConfig(filename='/tmp/django.log', level=logging.DEBUG)
 
+@login_required
 def home(request):
     logging.debug('home')
     return items(request)
 
+@login_required
 def items(request):
     item_list = Item.objects.all()
     paginator = Paginator(item_list, 5)
@@ -34,11 +38,14 @@ def items(request):
     except (EmptyPage, InvalidPage):
 	first_item_list = paginator.page(paginator.num_pages)
 
-    return render_to_response('app/items.html', {'items': first_item_list})
+    return render_to_response('app/items.html', {'items': first_item_list}, context_instance=RequestContext(request))
 
+
+@login_required
 def all_categories(request):
     return items(request)
 
+@login_required
 def items_search(request):
     logging.debug('item_search')
     if request.method == 'POST':
@@ -64,20 +71,23 @@ def items_search(request):
 	    except (EmptyPage, InvalidPage):
 		first_results = paginator.page(paginator.num_pages)
 
-	    return render_to_response('app/items_search.html', {'form': form, 'items': first_results})
+	    return render_to_response('app/items_search.html', {'form': form, 'items': first_results}, context_instance=RequestContext(request))
     else:
 	form = SearchForm()
 
-    return render_to_response('app/items_search.html', {'form': form})
+    return render_to_response('app/items_search.html', {'form': form}, context_instance=RequestContext(request))
 
+@login_required
 def item(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
-    return render_to_response('app/item_view.html', {'item': item})
+    return render_to_response('app/item_view.html', {'item': item}, context_instance=RequestContext(request))
 
+@login_required
 def item_delete(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
-    return render_to_response('app/item_delete.html', {'item': item})
+    return render_to_response('app/item_delete.html', {'item': item}, context_instance=RequestContext(request))
 
+@login_required
 def item_delete_force(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
     # unlink file to prevent its deletion
@@ -86,6 +96,7 @@ def item_delete_force(request, item_id):
     item.delete()
     return HttpResponseRedirect(reverse('app.views.items'))
 
+@login_required
 def item_edit(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
     itemtype = item.type
@@ -114,11 +125,13 @@ def item_edit(request, item_id):
 
     # disabled fields are not submitted so we also add a hidden field for the type
     form.fields['type'].widget.attrs['disabled'] = 'disabled'
-    return render_to_response('app/item_form.html', {'item': item, 'form': form})
+    return render_to_response('app/item_form.html', {'item': item, 'form': form}, context_instance=RequestContext(request))
 
+@login_required
 def item_add(request):
     return item_type_add(request, None)
 
+@login_required
 def item_type_add(request, type_id):
     if type_id is not None:
 	itemtype = get_object_or_404(ItemType, pk=type_id)
@@ -154,8 +167,9 @@ def item_type_add(request, type_id):
 
     addurl = reverse('app.views.item_add')
     form.fields['type'].widget.attrs['onchange'] = 'eval(window.location=\'' + addurl + '\' + this.value);'
-    return render_to_response('app/item_form.html', {'item': None, 'type': itemtype, 'form': form})
+    return render_to_response('app/item_form.html', {'item': None, 'type': itemtype, 'form': form}, context_instance=RequestContext(request))
 
+@login_required
 def items_import(request):
     if request.method == 'POST':
 	form = ImportForm(request.POST, request.FILES)
@@ -200,12 +214,14 @@ def items_import(request):
     else:
 	form = ImportForm()
 
-    return render_to_response('app/items_import.html', {'form': form})
+    return render_to_response('app/items_import.html', {'form': form}, context_instance=RequestContext(request))
 
+@login_required
 def performer(request, performer_id):
     performer = get_object_or_404(Performer, pk=performer_id)
-    return render_to_response('app/performer_view.html', {'performer': performer})
+    return render_to_response('app/performer_view.html', {'performer': performer}, context_instance=RequestContext(request))
 
+@login_required
 def performer_edit(request, performer_id):
     performer = get_object_or_404(Performer, pk=performer_id)
     performertype = performer.type
@@ -229,11 +245,13 @@ def performer_edit(request, performer_id):
     else:
 	form = formType(instance = performer)
 
-    return render_to_response('app/performer_form.html', {'performer': performer, 'form': form})
+    return render_to_response('app/performer_form.html', {'performer': performer, 'form': form}, context_instance=RequestContext(request))
 
+@login_required
 def performer_add(request):
     return performer_type_add(request, None)
 
+@login_required
 def performer_type_add(request, type_id):
     if type_id is not None:
 	performertype = get_object_or_404(PerformerType, pk=type_id)
@@ -258,22 +276,25 @@ def performer_type_add(request, type_id):
 
     addurl = reverse('app.views.performer_add')
     form.fields['type'].widget.attrs['onchange'] = 'eval(window.location=\'' + addurl + '\' + this.value);'
-    return render_to_response('app/performer_form.html', {'performer': None, 'type': performertype, 'form': form})
+    return render_to_response('app/performer_form.html', {'performer': None, 'type': performertype, 'form': form}, context_instance=RequestContext(request))
 
+@login_required
 def performer_delete(request, performer_id):
     performer = get_object_or_404(Performer, pk=performer_id)
-    return render_to_response('app/performer_delete.html', {'performer': performer})
+    return render_to_response('app/performer_delete.html', {'performer': performer}, context_instance=RequestContext(request))
 
+@login_required
 def performer_delete_force(request, performer_id):
     performer = get_object_or_404(Performer, pk=performer_id)
     performer.delete()
     return HttpResponseRedirect(reverse('app.views.items'))
 
-
+@login_required
 def role(request, role_id):
     role = get_object_or_404(Role, pk=role_id)
-    return render_to_response('app/role_view.html', {'role': role})
+    return render_to_response('app/role_view.html', {'role': role}, context_instance=RequestContext(request))
 
+@login_required
 def role_edit(request, role_id):
     role = get_object_or_404(Role, pk=role_id)
 
@@ -288,11 +309,13 @@ def role_edit(request, role_id):
     else:
 	form = RoleForm(instance = role)
 
-    return render_to_response('app/role_form.html', {'role': role, 'form': form})
+    return render_to_response('app/role_form.html', {'role': role, 'form': form}, context_instance=RequestContext(request))
 
+@login_required
 def role_add(request):
     return role_item_add(request, None)
 
+@login_required
 def role_item_add(request, item_id):
     if request.method == 'POST':
 	form = RoleForm(request.POST)
@@ -306,14 +329,16 @@ def role_item_add(request, item_id):
     else:
 	form = RoleForm(initial={'item': item_id})
 
-    return render_to_response('app/role_form.html', {'role': None, 'form': form})
+    return render_to_response('app/role_form.html', {'role': None, 'form': form}, context_instance=RequestContext(request))
 
+@login_required
 def role_delete(request, role_id):
     role = get_object_or_404(Role, pk=role_id)
     item_id = role.item.pk
     role.delete()
     return HttpResponseRedirect(reverse('app.views.item', args=[item_id]))
 
+@login_required
 def category(request, type_id):
     itemtype = get_object_or_404(ItemType, pk=type_id)
     item_list = Item.objects.filter(type=type_id)
@@ -329,8 +354,9 @@ def category(request, type_id):
     except (EmptyPage, InvalidPage):
 	first_item_list = paginator.page(paginator.num_pages)
 
-    return render_to_response('app/items.html', {'items': first_item_list, 'header': 'with category ' + itemtype.name})
+    return render_to_response('app/items.html', {'items': first_item_list, 'header': 'with category ' + itemtype.name}, context_instance=RequestContext(request))
 
+@login_required
 def tag(request, tag_id):
     tag = get_object_or_404(Tag, pk=tag_id)
     item_list = TaggedItem.objects.get_by_model(Item, tag)
@@ -346,8 +372,9 @@ def tag(request, tag_id):
     except (EmptyPage, InvalidPage):
 	first_item_list = paginator.page(paginator.num_pages)
 
-    return render_to_response('app/items.html', {'items': first_item_list, 'header': 'tagged with ' + tag.name})
+    return render_to_response('app/items.html', {'items': first_item_list, 'header': 'tagged with ' + tag.name}, context_instance=RequestContext(request))
 
+@login_required
 def lookup_tags(request):
     logging.debug('lookup_tags')
     results = ''
