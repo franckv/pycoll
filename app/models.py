@@ -24,6 +24,7 @@ class Performer(models.Model):
 	return ('app.views.performer', [str(self.pk)])
 
 
+    @classmethod
     def new(cls, performertype):
 	if performertype.name == 'Person':
 	    performer = Person()
@@ -34,9 +35,6 @@ class Performer(models.Model):
 
 	performer.type = performertype
 	return performer
-
-    new = classmethod(new)
-
 
 class Person(Performer):
     first_name = models.CharField(max_length=200)
@@ -84,6 +82,7 @@ class Item(models.Model):
     def __unicode__(self):
 	return self.name
 
+    @classmethod
     def new(cls, itemtype):
 	if itemtype.name == 'CD':
 	    item = CD()
@@ -94,8 +93,6 @@ class Item(models.Model):
 
 	item.type = itemtype
 	return item
-
-    new = classmethod(new)
 
     class Meta:
 	ordering = ['name']
