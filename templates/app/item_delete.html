@@ -10,4 +10,3 @@ Confirm deletion of "{{ item }}" ?
 <a href='{% url app.views.item_delete_force item.pk %}'>Y</a> / <a href='{{ item.get_absolute_url }}'>N</a>
 
 {% endblock %}
-
