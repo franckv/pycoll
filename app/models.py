@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ObjectDoesNotExist
 from tagging.fields import TagField
 
 # Create your models here.
@@ -16,8 +17,10 @@ class Performer(models.Model):
     def __unicode__(self):
 	if self.type.name == 'Person':
 	    return self.person.__unicode__()
-	else:
+	elif self.type.name == 'Group': 
 	    return self.group.__unicode__()
+	else:
+	    return self.name
 
     @models.permalink
     def get_absolute_url(self):
@@ -37,11 +40,20 @@ class Performer(models.Model):
 	return performer
 
 class Person(Performer):
-    first_name = models.CharField(max_length=200)
-    last_name = models.CharField(max_length=200)
+    first_name = models.CharField(max_length=200, blank=True)
+    last_name = models.CharField(max_length=200, blank=True)
 
     def __unicode__(self):
-	return '%s, %s' % (self.last_name, self.first_name)
+	displayname = ''
+	if len(self.last_name) > 0:
+	    displayname = self.last_name
+	    if len(self.first_name) > 0:
+		displayname = '%s, %s' % (displayname, self.first_name)
+	else:
+	    displayname = self.first_name
+
+	#return '%s, %s' % (self.last_name, self.first_name)
+	return displayname
 
     @models.permalink
     def get_absolute_url(self):
@@ -67,6 +79,7 @@ class ItemType(models.Model):
 
 class Item(models.Model):
     name =  models.CharField(max_length=255)
+    alternative_name = models.CharField(max_length=255, blank=True)
     type = models.ForeignKey(ItemType)
     description =  models.CharField(max_length=255, blank=True)
     release_date = models.DateField(blank=True, null=True)
@@ -80,7 +93,12 @@ class Item(models.Model):
 	return ('app.views.item', [str(self.pk)])
 
     def __unicode__(self):
-	return self.name
+	if self.type.name == 'CD':
+	    return self.cd.__unicode__()
+	elif self.type.name == 'DVD':
+	    return self.dvd.__unicode__()
+	else:
+	    return self.name
 
     @classmethod
     def new(cls, itemtype):
@@ -117,7 +135,12 @@ class Role(models.Model):
 
 class CD(Item):
     def __unicode__(self):
-	return self.name
+	try:
+	    artist = Role.objects.filter(item__name = self.name).get(type__name = 'Artist').performer.name
+	except:
+	    artist = '?'
+
+	return '%s - %s' % (artist, self.name)
     
 class DVD(Item):
     def __unicode__(self):
