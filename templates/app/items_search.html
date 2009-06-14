@@ -16,7 +16,7 @@
 <hr />
 <br />
 {% if items %}
-
+{% ifnotequal items.object_list|length 0 %}
 <div class='pagination'>
     <span>
     {% if items.has_previous %}
@@ -40,6 +40,9 @@
     {% endfor %}
     </table>
 </div>
+{% else %}
+    No results
+{% endifnotequal %}
 {% else %}
     No results
 {% endif %}
