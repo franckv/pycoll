@@ -28,7 +28,7 @@ class CDForm(ItemForm):
 	model = CD
 
 class DVDForm(ItemForm):
-    description = forms.CharField(widget=forms.Textarea)
+    description = forms.CharField(widget=forms.Textarea, required=False)
     class Meta:
 	model = DVD
 
