@@ -32,7 +32,7 @@
 				    <li id="home"><a href="{% url app.views.home %}">{% trans 'Home' %}</a></li>
 				    <li id="admin"><a href="/admin/">{% trans 'Admin' %}</a></li>
 				    <li id="about"><a href="/about/">{% trans 'About' %}</a></li>
-				    <li>{{ user.username }}</li>
+				    <li><a href='{% url django.contrib.auth.views.logout %}'>{{ user.username }}</a></li>
 				    <li>{{ LANGUAGE_CODE }}</li>
 				</ul>
 			</div>
