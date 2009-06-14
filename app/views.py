@@ -2,13 +2,14 @@ import datetime
 import csv
 import logging
 
-from django.shortcuts import render_to_response, get_object_or_404
-from django.utils import simplejson
-from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
+from django.utils import simplejson
+from django.views.generic import list_detail
 
 from settings import MEDIA_ROOT
 from models import *
@@ -25,21 +26,13 @@ def home(request):
 
 @login_required
 def items(request):
-    item_list = Item.objects.all()
-    paginator = Paginator(item_list, 5)
-
-    try:
-	page = int(request.GET.get('page', '1'))
-    except ValueError:
-	page = 1
-
-    try:
-	first_item_list = paginator.page(page)
-    except (EmptyPage, InvalidPage):
-	first_item_list = paginator.page(paginator.num_pages)
-
-    return render_to_response('app/items.html', {'items': first_item_list}, context_instance=RequestContext(request))
-
+    return list_detail.object_list(
+	request,
+	queryset = Item.objects.all(),
+	paginate_by = 5,
+	template_name = 'app/items.html',
+	template_object_name = 'items'
+    )
 
 @login_required
 def all_categories(request):
@@ -336,38 +329,26 @@ def role_delete(request, role_id):
 @login_required
 def category(request, type_id):
     itemtype = get_object_or_404(ItemType, pk=type_id)
-    item_list = Item.objects.filter(type=type_id)
-    paginator = Paginator(item_list, 5)
-
-    try:
-	page = int(request.GET.get('page', '1'))
-    except ValueError:
-	page = 1
-
-    try:
-	first_item_list = paginator.page(page)
-    except (EmptyPage, InvalidPage):
-	first_item_list = paginator.page(paginator.num_pages)
-
-    return render_to_response('app/items.html', {'items': first_item_list, 'header': 'with category ' + itemtype.name}, context_instance=RequestContext(request))
+    return list_detail.object_list(
+	request,
+	queryset = Item.objects.filter(type=type_id),
+	paginate_by = 5,
+	template_name = 'app/items.html',
+	template_object_name = 'items',
+	extra_context = {'header': 'with category ' + itemtype.name}
+    )
 
 @login_required
 def tag(request, tag_id):
     tag = get_object_or_404(Tag, pk=tag_id)
-    item_list = TaggedItem.objects.get_by_model(Item, tag)
-    paginator = Paginator(item_list, 5)
-
-    try:
-	page = int(request.GET.get('page', '1'))
-    except ValueError:
-	page = 1
-
-    try:
-	first_item_list = paginator.page(page)
-    except (EmptyPage, InvalidPage):
-	first_item_list = paginator.page(paginator.num_pages)
-
-    return render_to_response('app/items.html', {'items': first_item_list, 'header': 'tagged with ' + tag.name}, context_instance=RequestContext(request))
+    return list_detail.object_list(
+	request,
+	queryset = TaggedItem.objects.get_by_model(Item, tag),
+	paginate_by = 5,
+	template_name = 'app/items.html',
+	template_object_name = 'items',
+	extra_context = {'header': 'tagged with ' + tag.name}
+    )
 
 @login_required
 def lookup_tags(request):
