@@ -130,11 +130,7 @@ def item_edit(request, item_id):
     return render_to_response('app/item_form.html', {'item': item, 'form': form}, context_instance=RequestContext(request))
 
 @login_required
-def item_add(request):
-    return item_type_add(request, None)
-
-@login_required
-def item_type_add(request, type_id):
+def item_add(request, type_id=None):
     if type_id is not None:
 	itemtype = get_object_or_404(ItemType, pk=type_id)
     else:
@@ -250,11 +246,7 @@ def performer_edit(request, performer_id):
     return render_to_response('app/performer_form.html', {'performer': performer, 'form': form}, context_instance=RequestContext(request))
 
 @login_required
-def performer_add(request):
-    return performer_type_add(request, None)
-
-@login_required
-def performer_type_add(request, type_id):
+def performer_add(request, type_id=None):
     if type_id is not None:
 	performertype = get_object_or_404(PerformerType, pk=type_id)
     else:
