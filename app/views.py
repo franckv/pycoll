@@ -123,7 +123,9 @@ def item_edit(request, item_id):
     else:
 	form = formType(instance = item, initial={'tags': tagging.utils.edit_string_for_tags(Tag.objects.get_for_object(item))})
 
+    # user should not be able to change a item type so we disable it
     # disabled fields are not submitted so we also add a hidden field for the type
+    form.fields['type'].queryset = ItemType.objects.filter(pk=itemtype.pk)
     form.fields['type'].widget.attrs['disabled'] = 'disabled'
     return render_to_response('app/item_form.html', {'item': item, 'form': form}, context_instance=RequestContext(request))
 
@@ -296,6 +298,7 @@ def role(request, role_id):
 
 @login_required
 def role_edit(request, role_id):
+    logging.debug('role_edit')
     role = get_object_or_404(Role, pk=role_id)
 
     if request.method == 'POST':
