@@ -39,7 +39,7 @@
     {% for item in items.object_list %}
     <tr class='{% cycle 'odd' 'even' %}'>
 	<td class='item_cover'>{% get_cover item %}</td>
-	<td><a href='{{ item.get_absolute_url }}'>{{ item.name }}</a></td>
+	<td><a href='{{ item.get_absolute_url }}'>{{ item }}</a></td>
 	<td class='item_type'><a href='{{ item.type.get_absolute_url }}'>{{ item.type }}</a></td>
 	<td class='item_tools'><a href='{% url app.views.item_edit item.pk %}'><img src='/media/img/edit.png' /></a>&nbsp;&nbsp;<a href='{% url app.views.item_delete item.pk %}'><img src='/media/img/delete.png' /></a></td>
     </tr>
