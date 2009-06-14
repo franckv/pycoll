@@ -2,7 +2,6 @@ import datetime
 import csv
 import logging
 
-from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
@@ -52,19 +51,14 @@ def items_search(request):
 	    if type is not None:
 		search_results = search_results.filter(type__pk = type.pk)
 
-	    paginator = Paginator(search_results, 5)
-
-	    try:
-		page = int(request.GET.get('page', '1'))
-	    except ValueError:
-		page = 1
-
-	    try:
-		first_results = paginator.page(page)
-	    except (EmptyPage, InvalidPage):
-		first_results = paginator.page(paginator.num_pages)
-
-	    return render_to_response('app/items_search.html', {'form': form, 'items': first_results}, context_instance=RequestContext(request))
+	    return list_detail.object_list(
+		request,
+		queryset = search_results,
+		paginate_by = 5,
+		template_name = 'app/items_search.html',
+		template_object_name = 'items',
+		extra_context = {'form': form}
+	    )
     else:
 	form = SearchForm()
 
