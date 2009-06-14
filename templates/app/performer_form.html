@@ -9,15 +9,10 @@
 
 {% if performer %}
 <h1>{{ performer }}</h1>
-<form action='{% url app.views.performer_edit performer.pk %}' METHOD='post'>
 {% else %}
 <h1>Add new performer</h1>
-{% if type %}
-<form action='{% url app.views.performer_type_add type.pk %}' method='post'>
-{% else %}
-<form action='{% url app.views.performer_add %}' method='post'>
 {% endif %}
-{% endif %}
+<form action='' method='post'>
 
     {{ form.as_p }}
     <input type='submit' value='save' />

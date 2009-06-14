@@ -32,16 +32,12 @@
 
 {% if item %}
 <h1>{{ item.name }}</h1>
-<form enctype="multipart/form-data" action='{% url app.views.item_edit item.pk %}' METHOD='post'>
+<form enctype="multipart/form-data" action='' method='post'>
     <input type='hidden' name='type' value='{{item.type.pk}}' />
     {% get_cover item %}
 {% else %}
 <h1>Add new item</h1>
-{% if type %}
-<form enctype="multipart/form-data" action='{% url app.views.item_type_add type.pk %}' method='post'>
-{% else %}
-<form enctype="multipart/form-data" action='{% url app.views.item_add %}' method='post'>
-{% endif %}
+<form enctype="multipart/form-data" action='' method='post'>
 {% endif %}
 
     {% for field in form %}

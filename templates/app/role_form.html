@@ -9,11 +9,10 @@
 
 {% if role %}
 <h1>{{ role }}</h1>
-<form action='{% url app.views.role_edit role.pk %}' METHOD='post'>
 {% else %}
 <h1>Add new role</h1>
-<form action='{% url app.views.role_add %}' method='post'>
 {% endif %}
+<form action='' method='post'>
 
     {% for field in form %}
     <p>
