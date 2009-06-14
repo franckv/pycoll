@@ -8,6 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.utils import simplejson
+from django.utils.translation import ugettext as _
 from django.views.generic import list_detail
 
 from settings import MEDIA_ROOT
@@ -341,7 +342,7 @@ def tag(request, tag_id):
 	paginate_by = 5,
 	template_name = 'app/items.html',
 	template_object_name = 'items',
-	extra_context = {'header': 'tagged with ' + tag.name}
+	extra_context = {'header': _('tagged with ') + tag.name}
     )
 
 @login_required

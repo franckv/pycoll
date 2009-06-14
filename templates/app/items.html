@@ -18,9 +18,11 @@
 
 {% endblock %}
 
+{% load i18n %}
+
 {% block content %}
 
-<h1>Items {{header}}</h1>
+<h1>{% trans 'Items' %} {{header}}</h1>
 
 {% if items_list %}
 <div class='pagination'>
