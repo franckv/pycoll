@@ -8,13 +8,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-06-14 19:13+0200\n"
+"POT-Creation-Date: 2009-06-14 19:44+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: app/views.py:333
+msgid "with category "
+msgstr "de type "
 
 #: app/views.py:345
 msgid "tagged with "
@@ -51,6 +55,22 @@ msgstr "Syndication"
 #: templates/base.html:57
 msgid "Last additions"
 msgstr "Derniers ajouts"
+
+#: templates/app/all_actions.html:3
+msgid "Add Item"
+msgstr "Ajouter objet"
+
+#: templates/app/all_actions.html:4
+msgid "Add Performer"
+msgstr "Ajouter participant"
+
+#: templates/app/all_actions.html:5
+msgid "Search"
+msgstr "Recherche"
+
+#: templates/app/all_actions.html:6
+msgid "Import"
+msgstr "Import"
 
 #: templates/app/items.html:25
 msgid "Items"

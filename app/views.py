@@ -330,7 +330,7 @@ def category(request, type_id):
 	paginate_by = 5,
 	template_name = 'app/items.html',
 	template_object_name = 'items',
-	extra_context = {'header': 'with category ' + itemtype.name}
+	extra_context = {'header': _('with category ') + itemtype.name}
     )
 
 @login_required

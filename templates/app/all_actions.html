@@ -1,6 +1,7 @@
+{% load i18n %}
 <ul>
-    <li id='item_add'><a href='{% url app.views.item_add %}'>Add Item</a></li>
-    <li id='performer_add'><a href='{% url app.views.performer_add %}'>Add Performer</a></li>
-    <li id='search'><a href='{% url app.views.items_search %}'>Search</a></li>
-    <li id='import'><a href='{% url app.views.items_import %}'>Import</a></li>
+    <li id='item_add'><a href='{% url app.views.item_add %}'>{% trans 'Add Item' %}</a></li>
+    <li id='performer_add'><a href='{% url app.views.performer_add %}'>{% trans 'Add Performer' %}</a></li>
+    <li id='search'><a href='{% url app.views.items_search %}'>{% trans 'Search' %}</a></li>
+    <li id='import'><a href='{% url app.views.items_import %}'>{% trans 'Import' %}</a></li>
 </ul>
