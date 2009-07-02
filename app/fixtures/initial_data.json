@@ -4,5 +4,6 @@
   {"pk": 1, "model": "app.itemtype", "fields": {"name": "CD", "description": "CD"}},
   {"pk": 2, "model": "app.itemtype", "fields": {"name": "DVD", "description": "DVD"}},
   {"pk": 1, "model": "app.roletype", "fields": {"name": "Artist"}},
-  {"pk": 2, "model": "app.roletype", "fields": {"name": "Actor"}}
+  {"pk": 2, "model": "app.roletype", "fields": {"name": "Actor"}},
+  {"pk": 1, "model": "auth.user", "fields": {"username": "test", "first_name": "", "last_name": "", "is_active": true, "is_superuser": false, "is_staff": false, "last_login": "2009-06-17 22:09:40", "groups": [], "user_permissions": [], "password": "sha1$88d6e$fc83226420ee3a5d96fdba7ae2a59048d27940d4", "email": "", "date_joined": "2009-06-17 22:09:40"}}
 ]
